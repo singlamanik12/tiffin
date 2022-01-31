@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Layout from "./shared/Layout";
-import Home from "./components/Home";
-
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import "./styles.css";
 ReactDOM.render(
-  <React.StrictMode>
-    <Home />
-  </React.StrictMode>,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

@@ -1,5 +1,4 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -10,7 +9,7 @@ export default function BasicSelect({ label, value, handleChange }) {
     <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-label"
+        labelId="asdd"
         id="demo-simple-select"
         value={value}
         label={label}

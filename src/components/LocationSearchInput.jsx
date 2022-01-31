@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 export default class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: "" };
+    this.state = { address: props?.default || "" };
   }
 
   handleChange = (address) => {
@@ -32,7 +32,7 @@ export default class LocationSearchInput extends React.Component {
         searchOptions={{ componentRestrictions: { country: "ca" } }}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
+          <>
             <TextField
               fullWidth
               {...getInputProps({
@@ -41,7 +41,7 @@ export default class LocationSearchInput extends React.Component {
               })}
             />
             <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
+              {loading && <div style={{ padding: "10px" }}>Loading...</div>}
               {suggestions.map((suggestion) => {
                 const className = suggestion.active
                   ? "suggestion-item--active"
@@ -63,7 +63,7 @@ export default class LocationSearchInput extends React.Component {
                 );
               })}
             </div>
-          </div>
+          </>
         )}
       </PlacesAutocomplete>
     );
