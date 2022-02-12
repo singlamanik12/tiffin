@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataContext from "./api/context";
 import LoginForm from "./components/LoginForm";
 import ServiceRoutes from "./components/Routes";
@@ -9,13 +9,17 @@ import AppBar from "./components/AppBar";
 const App = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
+  useEffect(() => {
+    const data = localStorage.getItem("user");
+    setUser(JSON.parse(data));
+  }, []);
   return (
     <DataContext.Provider value={{ open, setOpen, user, setUser }}>
       {/* <Grid item xs={12}>
         <Typography>Harnish</Typography>
       </Grid> */}
-      <LoginForm />
       <AppBar />
+      <LoginForm />
       <Grid container style={{ minHeight: "80vh", padding: "8px" }}>
         <ServiceRoutes />
       </Grid>

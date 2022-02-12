@@ -24,7 +24,7 @@ const LoginForm = () => {
   const handleSubmit = async () => {
     try {
       console.log(await signup(data));
-
+      setOpen(false);
       handlePhoneVerification(data.PhoneNumber);
     } catch (err) {
       console.log(err);
@@ -36,8 +36,9 @@ const LoginForm = () => {
       var values = { PhoneNumber: phoneNumber };
       const { data } = await login(values);
       if (data) {
-        console.log(data);
+        console.log(jwt_decode(data));
         setUser(jwt_decode(data));
+        localStorage.setItem("user", JSON.stringify(jwt_decode(data)));
         setOpen(false);
       }
     } catch (err) {

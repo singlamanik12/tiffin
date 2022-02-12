@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -43,6 +43,7 @@ const InfoForm = ({ handleChange, handleSubmit }) => {
           }}
         /> */}
       </DialogContent>
+      <Typography color="red">All fields are required</Typography>
       <DialogActions>
         <Button id="sign-in-button" onClick={handleSubmit}>
           Finish Signup

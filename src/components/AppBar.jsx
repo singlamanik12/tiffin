@@ -49,7 +49,7 @@ const EnableColorOnDarkAppBar = () => {
               </Typography>
             ) : (
               <Button color="inherit" onClick={() => setOpen(true)}>
-                SignIn
+                Sign In
               </Button>
             )}
           </Toolbar>

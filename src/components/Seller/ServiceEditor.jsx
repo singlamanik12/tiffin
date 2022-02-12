@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import InputField from "../shared/InputField";
-import Label from "../shared/Label";
-import Layout from "./../shared/Layout";
+import InputField from "../../shared/InputField";
+import Label from "../../shared/Label";
+import Layout from "../../shared/Layout";
 import { Button, InputAdornment, Typography } from "@mui/material";
 const ServiceEditor = () => {
   const [value, setValue] = useState({});
