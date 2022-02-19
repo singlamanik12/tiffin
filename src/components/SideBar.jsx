@@ -9,14 +9,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-
+import DataContext from "./../api/context";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 export default function SideBar() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const { side, setSide } = React.useContext(DataContext);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -26,15 +23,15 @@ export default function SideBar() {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setSide({ ...side, [anchor]: open });
   };
 
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={toggleDrawer("left", false)}
+      onKeyDown={toggleDrawer("left", false)}
     >
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
@@ -62,12 +59,15 @@ export default function SideBar() {
 
   return (
     <div>
-      {["left", "right", "top", "bottom"].map((anchor) => (
+      {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <IconButton onClick={toggleDrawer(anchor, true)}>
+            {" "}
+            <MenuIcon />
+          </IconButton>
           <Drawer
             anchor={anchor}
-            open={state[anchor]}
+            open={side[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
             {list(anchor)}

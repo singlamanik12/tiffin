@@ -9,12 +9,17 @@ import AppBar from "./components/AppBar";
 const App = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
+  const [side, setSide] = React.useState({
+    left: false,
+  });
   useEffect(() => {
     const data = localStorage.getItem("user");
     setUser(JSON.parse(data));
   }, []);
   return (
-    <DataContext.Provider value={{ open, setOpen, user, setUser }}>
+    <DataContext.Provider
+      value={{ open, setOpen, user, setUser, side, setSide }}
+    >
       {/* <Grid item xs={12}>
         <Typography>Harnish</Typography>
       </Grid> */}

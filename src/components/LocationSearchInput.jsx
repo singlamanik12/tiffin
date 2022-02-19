@@ -56,7 +56,7 @@ export default class LocationSearchInput extends React.Component {
                       className,
                       style,
                     })}
-                    style={{ padding: "10px" }}
+                    style={{ padding: "10px", cursor: "pointer" }}
                   >
                     <span>{suggestion.description}</span>
                   </div>

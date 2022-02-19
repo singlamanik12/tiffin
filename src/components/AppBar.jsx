@@ -3,13 +3,13 @@ import { AppBar, Button } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+
+import SideBar from "./SideBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import DataContext from "./../api/context";
 
 const EnableColorOnDarkAppBar = () => {
-  const { setOpen, user } = useContext(DataContext);
+  const { setOpen, user, setSide } = useContext(DataContext);
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
@@ -24,14 +24,7 @@ const EnableColorOnDarkAppBar = () => {
       <ThemeProvider theme={darkTheme}>
         <AppBar position="static" color="primary">
           <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <SideBar />
             <Typography
               variant="h6"
               noWrap
@@ -43,10 +36,8 @@ const EnableColorOnDarkAppBar = () => {
             {/* <Button color="inherit" onClick={() => setOpen(true)}>
       Login/SignUp
     </Button> */}
-            {Object.keys(user).length != 0 ? (
-              <Typography>
-                Welcome, {user.FirstName} {user.LastName}
-              </Typography>
+            {!!user ? (
+              <Typography>{user.FirstName}</Typography>
             ) : (
               <Button color="inherit" onClick={() => setOpen(true)}>
                 Sign In

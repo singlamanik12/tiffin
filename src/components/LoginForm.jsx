@@ -48,7 +48,7 @@ const LoginForm = () => {
     }
   };
   useEffect(() => {
-    if (Object.keys(user).length != 0) {
+    if (!!user) {
       setOpen(false);
     }
   });
