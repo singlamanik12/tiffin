@@ -21,8 +21,8 @@ const EnableColorOnDarkAppBar = () => {
   console.log(user);
   return (
     <Stack spacing={2} sx={{ flexGrow: 1, marginBottom: 2 }}>
-      <ThemeProvider theme={darkTheme}>
-        <AppBar position="static" color="primary">
+      
+        <AppBar position="static" style={{backgroundColor:"#6200EE"}}>
           <Toolbar>
             <SideBar />
             <Typography
@@ -45,7 +45,7 @@ const EnableColorOnDarkAppBar = () => {
             )}
           </Toolbar>
         </AppBar>
-      </ThemeProvider>
+     
     </Stack>
   );
 };

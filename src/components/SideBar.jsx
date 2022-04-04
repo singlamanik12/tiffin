@@ -63,7 +63,7 @@ export default function SideBar() {
         <React.Fragment key={anchor}>
           <IconButton onClick={toggleDrawer(anchor, true)}>
             {" "}
-            <MenuIcon />
+            <MenuIcon style={{color:"white", marginRight:10}}/>
           </IconButton>
           <Drawer
             anchor={anchor}
