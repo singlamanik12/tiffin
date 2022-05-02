@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ServiceOutline from "./ServiceOutline";
 import { Grid } from "@mui/material";
-import Divider from "@mui/material/Divider";
-const ServicesList = () => {
+
+const ServicesList = ({ services = [] }) => {
   return (
     <>
       <Grid container>
-        <ServiceOutline />
-
-        <ServiceOutline />
-        <ServiceOutline />
+        {services.map((service) => (
+          <ServiceOutline service={service} />
+        ))}
       </Grid>
     </>
   );

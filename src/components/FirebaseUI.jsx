@@ -1,9 +1,8 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import DataContext from "./../api/context";
-import { Dialog } from "@mui/material";
+
 // Configure Firebase.
 
 // Configure FirebaseUI.

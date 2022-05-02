@@ -1,14 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import Layout from "../shared/Layout";
+import ServicesList from "./ServicesList";
+import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { Select, Grid } from "@mui/material";
-import axios from "axios";
+import Select from "@mui/material/Select";
+import { useParams } from "react-router-dom";
+import { getMenuByCity } from "../api/menu";
 import DataContext from "../api/context";
-function Home() {
+const Search = () => {
   const [citi, setCity] = React.useState("");
   const [cityList, setCityList] = React.useState([]);
+  const [services, setServices] = React.useState([]);
+  const { city } = useParams();
   const { setLoading } = useContext(DataContext);
   const onLoad = async () => {
     setLoading(true);
@@ -16,14 +21,24 @@ function Home() {
       "https://singlamanik12.github.io/cities/ca.json"
     );
     setCityList(data.cities);
-    setLoading(false);
+    fetchDataByCity();
   };
   useEffect(() => onLoad(), []);
+  const fetchDataByCity = async () => {
+    const res = city.replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+      letter.toUpperCase()
+    );
+    const { data } = await getMenuByCity(res);
+    setCity(res);
+    console.log(data);
+    setServices(data);
+    setLoading(false);
+  };
   const handleChange = (event) => {
     window.location.href = `/services/${event.target.value}`;
   };
   return (
-    <Layout style={{ paddingTop: 70 }}>
+    <Layout style={{ paddingTop: "30px" }}>
       <FormControl fullWidth style={{ marginBottom: "20px" }}>
         <InputLabel id="demo-simple-select-label">City</InputLabel>
         <Select
@@ -40,8 +55,9 @@ function Home() {
           ))}
         </Select>
       </FormControl>
+      <ServicesList services={services} />
     </Layout>
   );
-}
+};
 
-export default Home;
+export default Search;

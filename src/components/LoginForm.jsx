@@ -10,26 +10,26 @@ import FirebaseUI from "./FirebaseUI";
 import jwt_decode from "jwt-decode";
 import firebase from "firebase/compat/app";
 import InfoForm from "./InfoForm";
-import { login, signup } from "./../api/customer";
+import { login, signup } from "../api/customer";
 const LoginForm = () => {
   const { open, setOpen, user, setUser } = useContext(DataContext);
-  const [data, setData] = useState({});
+  const [PhoneNumber, setPhoneNumber] = useState();
   const [step, setStep] = useState(1);
   const handleClose = () => {
     setOpen(false);
   };
-  const handleChange = (event) => {
-    setData(Object.assign({}, data, { [event.target.id]: event.target.value }));
-  };
-  const handleSubmit = async () => {
-    try {
-      console.log(await signup(data));
-      setOpen(false);
-      handlePhoneVerification(data.PhoneNumber);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleChange = (event) => {
+  //   setData(Object.assign({}, data, { [event.target.id]: event.target.value }));
+  // };
+  // const handleSubmit = async () => {
+  //   try {
+  //     console.log(await signup(data));
+  //     setOpen(false);
+  //     handlePhoneVerification(data.PhoneNumber);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
   const handlePhoneVerification = async (phoneNumber) => {
     try {
       console.log(phoneNumber);
@@ -42,7 +42,7 @@ const LoginForm = () => {
         setOpen(false);
       }
     } catch (err) {
-      setData(Object.assign({}, data, values));
+      setPhoneNumber(phoneNumber);
       setStep(2);
       console.log(err);
     }
@@ -88,8 +88,9 @@ const LoginForm = () => {
             1: <FirebaseUI handlePhoneVerification={handlePhoneVerification} />,
             2: (
               <InfoForm
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
+                PhoneNumber={PhoneNumber}
+                setOpen={setOpen}
+                handlePhoneVerification={handlePhoneVerification}
               />
             ),
           }[step]

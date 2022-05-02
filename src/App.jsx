@@ -5,9 +5,11 @@ import ServiceRoutes from "./components/Routes";
 import Footer from "./components/Footer";
 import { Grid } from "@mui/material";
 import AppBar from "./components/AppBar";
+import Loading from "./shared/Loading";
 
 const App = () => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [side, setSide] = React.useState({
     left: false,
@@ -18,7 +20,16 @@ const App = () => {
   }, []);
   return (
     <DataContext.Provider
-      value={{ open, setOpen, user, setUser, side, setSide }}
+      value={{
+        open,
+        setOpen,
+        user,
+        setUser,
+        side,
+        setSide,
+        loading,
+        setLoading,
+      }}
     >
       {/* <Grid item xs={12}>
         <Typography>Harnish</Typography>
@@ -26,6 +37,7 @@ const App = () => {
       <AppBar />
       <LoginForm />
       <Grid container style={{ minHeight: "80vh", padding: "8px" }}>
+        <Loading />
         <ServiceRoutes />
       </Grid>
       <Footer />

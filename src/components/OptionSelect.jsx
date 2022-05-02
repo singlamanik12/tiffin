@@ -8,6 +8,8 @@ export default function OptionSelect({
   onChange,
   style,
   id,
+  name,
+  error,
 }) {
   return (
     <Grid item xs={12} container style={style}>
@@ -16,10 +18,11 @@ export default function OptionSelect({
         <Select
           labelId={id}
           id={id}
-          name={id}
+          name={name}
           value={selected}
           label={label}
           onChange={onChange}
+          error={error}
         >
           {options.map((option) => (
             <MenuItem value={option}>{option}</MenuItem>

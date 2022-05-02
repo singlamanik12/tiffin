@@ -4,32 +4,55 @@ import { TextField, Typography } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-
-const InfoForm = ({ handleChange, handleSubmit }) => {
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { login, signup } from "../api/customer";
+const InfoSchema = Yup.object().shape({
+  FirstName: Yup.string().required("Required"),
+  LastName: Yup.string().required("Required"),
+});
+const InfoForm = ({ PhoneNumber, setOpen, handlePhoneVerification }) => {
+  const formik = useFormik({
+    initialValues: {
+      FirstName: "",
+      LastName: "",
+      PhoneNumber: PhoneNumber,
+    },
+    validationSchema: InfoSchema,
+    onSubmit: async (values) => {
+      await signup(values);
+      handlePhoneVerification(PhoneNumber);
+    },
+  });
   return (
     <>
       {/* <DialogTitle>LogIn</DialogTitle> */}
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="FirstName"
-          name="FirstName"
-          label="First Name"
-          type="name"
-          fullWidth
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          id="LastName"
-          name="LastName"
-          label="Last Name"
-          type="name"
-          fullWidth
-          onChange={handleChange}
-        />
-        {/* <TextField
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="FirstName"
+            name="FirstName"
+            label="First Name"
+            type="name"
+            fullWidth
+            value={formik.values.FirstName}
+            onChange={formik.handleChange}
+            error={formik.touched.FirstName && Boolean(formik.errors.FirstName)}
+          />
+          <TextField
+            margin="dense"
+            id="LastName"
+            name="LastName"
+            label="Last Name"
+            type="name"
+            fullWidth
+            value={formik.values.LastName}
+            onChange={formik.handleChange}
+            error={formik.touched.LastName && Boolean(formik.errors.LastName)}
+          />
+          {/* <TextField
           margin="dense"
           id="phoneNumber"
           label="Phone Number"
@@ -42,13 +65,14 @@ const InfoForm = ({ handleChange, handleSubmit }) => {
             ),
           }}
         /> */}
-      </DialogContent>
-      <Typography color="red">All fields are required</Typography>
-      <DialogActions>
-        <Button id="sign-in-button" onClick={handleSubmit}>
-          Finish Signup
-        </Button>
-      </DialogActions>
+          <Button id="sign-in-button" type="submit">
+            Finish Signup
+          </Button>
+        </DialogContent>
+      </form>
+      {/* <DialogActions>
+        
+      </DialogActions> */}
     </>
   );
 };

@@ -2,13 +2,20 @@ import React from "react";
 import { Typography, Grid, Divider } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
-const ServiceOutline = () => {
+const ServiceOutline = ({ service }) => {
+  const { tname, vegPrice, nvegPrice, overview, _id } = service;
   let navigate = useNavigate();
+  const text = overview;
+
   return (
     <>
-      <Grid container style={{ padding: 10 }}>
+      <Grid
+        container
+        style={{ padding: 10, cursor: "pointer" }}
+        onClick={() => navigate(`/menu/${_id}`)}
+      >
         <Grid item xs={12}>
-          <Typography variant="h5">Amritsari Tiffin Service</Typography>
+          <Typography variant="h5">{tname}</Typography>
         </Grid>
         {/* <Grid
         item
@@ -26,10 +33,10 @@ const ServiceOutline = () => {
           We provide sweets on every friday included.
         </Typography>
       </Grid> */}
-        <Grid item xs={12} style={{ marginTop: 10, color: "#bc5cf7" }}>
+        <Grid item xs={12} style={{ marginTop: 10, color: "#808080" }}>
           <Typography variant="body1">
-            We provide both vegetarian and non vegetarian tiffin service from
-            Mon - Fri.
+            {text.substring(0, 190)}
+            {text.length > 190 && "..."}
           </Typography>
         </Grid>
         <Grid item xs={12} container style={{ marginTop: "50px" }}>
@@ -44,7 +51,7 @@ const ServiceOutline = () => {
                 borderRadius: 20,
               }}
             >
-              Veg - CA$ 165
+              Veg - CA$ {vegPrice}
             </Typography>{" "}
             <Typography
               style={{
@@ -57,7 +64,7 @@ const ServiceOutline = () => {
                 marginLeft: 10,
               }}
             >
-              Non-Veg - CA$ 185
+              Non-Veg - CA$ {nvegPrice}
             </Typography>{" "}
           </Grid>
 
@@ -66,10 +73,9 @@ const ServiceOutline = () => {
             xs={4}
             container
             justifyContent="right"
-            style={{ paddingTop: 2, color: "blue", cursor: "pointer" }}
+            style={{ paddingTop: 2, cursor: "pointer" }}
             onClick={() => navigate("/menu")}
           >
-            <Typography>Menu </Typography>
             <ArrowForwardIcon />
           </Grid>
         </Grid>

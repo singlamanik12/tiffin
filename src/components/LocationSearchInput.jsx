@@ -1,34 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
 import TextField from "@mui/material/TextField";
 
-export default class LocationSearchInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { address: props?.default || "" };
-  }
-
-  handleChange = (address) => {
-    this.setState({ address });
+const LocationSearchInput = ({ setAddress, error }) => {
+  const [locAddress, setLocAddress] = useState();
+  const [touched, setTouched] = useState(false);
+  const handleChange = (address) => {
+    setLocAddress(address);
+    setTouched(true);
   };
 
-  handleSelect = (address) => {
+  const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
       .then((latLng) => console.log("Success", latLng))
       .catch((error) => console.error("Error", error));
-    this.setState({ address });
+    setLocAddress(address);
+    setAddress(address);
   };
 
-  render() {
-    return (
+  return (
+    <>
       <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        value={locAddress}
+        onChange={handleChange}
+        onSelect={handleSelect}
         searchOptions={{ componentRestrictions: { country: "ca" } }}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -36,9 +35,10 @@ export default class LocationSearchInput extends React.Component {
             <TextField
               fullWidth
               {...getInputProps({
-                placeholder: "Search Places ...",
+                placeholder: "Address",
                 className: "location-search-input",
               })}
+              error={error}
             />
             <div className="autocomplete-dropdown-container">
               {loading && <div style={{ padding: "10px" }}>Loading...</div>}
@@ -66,6 +66,10 @@ export default class LocationSearchInput extends React.Component {
           </>
         )}
       </PlacesAutocomplete>
-    );
-  }
-}
+      {error && touched && (
+        <div style={{ color: "red" }}>Please select from suggestions.</div>
+      )}
+    </>
+  );
+};
+export default LocationSearchInput;

@@ -1,15 +1,16 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./Home";
+import Search from "./Search";
 import MenuSelection from "./MenuSelection";
 import Loading from "./../shared/Loading";
-import FirebaseUI from "./FirebaseUI";
-import SideBar from "./SideBar";
+import Home from "./Home";
 
 const ServiceRoutes = () => {
   return (
     <Routes>
-      <Route path="/menu" element={<MenuSelection />} />
+      <Route path="/menu/:id" element={<MenuSelection />} />
+      <Route path="/services/:city" element={<Search />} />
+      <Route path="/loading" element={<Loading />} />
       <Route path="/" element={<Home />} />
     </Routes>
   );
