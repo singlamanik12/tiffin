@@ -1,36 +1,73 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import OptionSelect from "./OptionSelect";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import LocationSearchInput from "./LocationSearchInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import DataContext from "../api/context";
+import { payOrder, payOrderAccount, saveOrder } from "../api/order";
 const OrderSchema = Yup.object().shape({
   menuOpt: Yup.string().required("Required"),
   rrOpt: Yup.string().required("Required"),
   rsOpt: Yup.string().required("Required"),
 });
 const OrderForm = ({
+  SelID,
+  tname,
   menuOptions,
   rr,
   rs,
+  vegPrice,
+  nvegPrice,
   selected,
   handleChange,
   handleSubmit,
 }) => {
-  const { user, setOpen } = useContext(DataContext);
+  const { user, setOpen, setLoading } = useContext(DataContext);
+  const [sellerAccount, setSellerAccount] = useState();
+  const loadPayAccount = async () => {
+    setSellerAccount(await payOrderAccount(SelID));
+    console.log(sellerAccount);
+  };
+  useEffect(() => {
+    loadPayAccount();
+  }, []);
   const formik = useFormik({
     initialValues: {
       menuOpt: "",
       rrOpt: "",
       rsOpt: "",
     },
+
     validationSchema: OrderSchema,
     onSubmit: async (values) => {
       if (address) {
         if (user) {
+          setLoading(true);
+          let price = 0;
           values.address = address;
+          values.sellerAccount = sellerAccount;
           console.log(values);
+          if (values.menuOpt === "Veg Menu") {
+            price = vegPrice;
+          } else {
+            price = nvegPrice;
+          }
+          values.price = price;
+          const result = await payOrder({
+            tname: tname,
+            price: price * 100,
+            sellerAccount: sellerAccount,
+          });
+          values.checkout = result.data;
+          values.ch_id = result.data.id;
+          values.SelID = SelID;
+          values.tname = tname;
+          values = { ...values, ...user };
+          const data = await saveOrder(values);
+          console.log(data);
+          setLoading(false);
+          window.location.href = result.data.url;
         } else {
           setOpen(true);
         }
@@ -77,14 +114,22 @@ const OrderForm = ({
             error={formik.touched.rsOpt && Boolean(formik.errors.rsOpt)}
           />
           <LocationSearchInput setAddress={setAddress} error={addErr} />
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            style={{ marginTop: 20 }}
-          >
-            Place Order
-          </Button>
+
+          {!!!sellerAccount ? (
+            <Typography color="secondary">
+              Seller currently doesn't accept any orders
+            </Typography>
+          ) : (
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={sellerAccount === undefined}
+              fullWidth
+              style={{ marginTop: 20 }}
+            >
+              Place Order
+            </Button>
+          )}
         </Grid>
       </form>
     </>

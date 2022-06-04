@@ -22,6 +22,7 @@ export default function MenuChoice({ values }) {
   }, []);
   const menuOptions = ["Veg Menu", "Non-Veg Menu"];
   const {
+    SelID,
     tname,
     overview,
     veg,
@@ -141,6 +142,8 @@ export default function MenuChoice({ values }) {
         </Grid>
       </Grid>
       <OrderForm
+        SelID={SelID}
+        tname={tname}
         menuOptions={menuOptions}
         rr={rr}
         rs={rs}
@@ -148,6 +151,8 @@ export default function MenuChoice({ values }) {
         selected={selected}
         handleSubmit={handleSubmit}
         setOpen={setOpen}
+        vegPrice={vegPrice}
+        nvegPrice={nvegPrice}
       />
     </Layout>
   );

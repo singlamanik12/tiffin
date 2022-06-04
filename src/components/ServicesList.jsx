@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import ServiceOutline from "./ServiceOutline";
 import { Grid } from "@mui/material";
+import React from "react";
+import ServiceOutline from "./ServiceOutline";
 
 const ServicesList = ({ services = [] }) => {
   return (

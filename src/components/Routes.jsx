@@ -4,6 +4,7 @@ import Search from "./Search";
 import MenuSelection from "./MenuSelection";
 import Loading from "./../shared/Loading";
 import Home from "./Home";
+import OrdersList from "./OrdersList";
 
 const ServiceRoutes = () => {
   return (
@@ -11,6 +12,7 @@ const ServiceRoutes = () => {
       <Route path="/menu/:id" element={<MenuSelection />} />
       <Route path="/services/:city" element={<Search />} />
       <Route path="/loading" element={<Loading />} />
+      <Route path="/orders" element={<OrdersList />} />
       <Route path="/" element={<Home />} />
     </Routes>
   );

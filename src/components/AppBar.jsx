@@ -3,22 +3,27 @@ import { AppBar, Button } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-
+import { useNavigate } from "react-router-dom";
 import SideBar from "./SideBar";
 
 import DataContext from "./../api/context";
 
 const EnableColorOnDarkAppBar = () => {
   const { setOpen, user } = useContext(DataContext);
-
-  console.log(user);
+  let navigate = useNavigate();
   return (
     <Stack spacing={2} sx={{ flexGrow: 1, marginBottom: 2 }}>
       <AppBar position="static" style={{ backgroundColor: "black" }}>
         <Toolbar>
           <SideBar />
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Daily Cater
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1 }}
+            onClick={() => navigate(`/`)}
+          >
+            Amrut
           </Typography>
           {/* <Button color="inherit" onClick={() => setOpen(true)}>
       Login/SignUp

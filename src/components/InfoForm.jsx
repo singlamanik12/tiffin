@@ -1,17 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
+import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { TextField, Typography } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useFormik } from "formik";
+import React, { useContext } from "react";
 import * as Yup from "yup";
-import { login, signup } from "../api/customer";
+import DataContext from "../api/context";
+import { signup } from "../api/customer";
 const InfoSchema = Yup.object().shape({
   FirstName: Yup.string().required("Required"),
   LastName: Yup.string().required("Required"),
 });
 const InfoForm = ({ PhoneNumber, setOpen, handlePhoneVerification }) => {
+  const { setLoading } = useContext(DataContext);
   const formik = useFormik({
     initialValues: {
       FirstName: "",
@@ -20,7 +20,9 @@ const InfoForm = ({ PhoneNumber, setOpen, handlePhoneVerification }) => {
     },
     validationSchema: InfoSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       await signup(values);
+      setLoading(false);
       handlePhoneVerification(PhoneNumber);
     },
   });
