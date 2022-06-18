@@ -32,11 +32,9 @@ const LoginForm = () => {
   // };
   const handlePhoneVerification = async (phoneNumber) => {
     try {
-      console.log(phoneNumber);
       var values = { PhoneNumber: phoneNumber };
       const { data } = await login(values);
       if (data) {
-        console.log(jwt_decode(data));
         setUser(jwt_decode(data));
         localStorage.setItem("user", JSON.stringify(jwt_decode(data)));
         setOpen(false);
@@ -44,7 +42,6 @@ const LoginForm = () => {
     } catch (err) {
       setPhoneNumber(phoneNumber);
       setStep(2);
-      console.log(err);
     }
   };
   useEffect(() => {

@@ -30,7 +30,6 @@ const Search = () => {
     );
     const { data } = await getMenuByCity(res);
     setCity(res);
-    console.log(data);
     setServices(data);
     setLoading(false);
   };

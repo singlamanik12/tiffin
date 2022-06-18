@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 export default function Order({ order }) {
-  React.useEffect(() => console.log(order), []);
   const {
     tname,
     startDate,
@@ -16,6 +15,7 @@ export default function Order({ order }) {
     menuOpt,
     rrOpt,
     rsOpt,
+    date,
     address,
     CreatedAt,
   } = order;
@@ -48,7 +48,7 @@ export default function Order({ order }) {
               <br />
               Delivers to - {address}
               <br />
-              Ordered on - {new Date(CreatedAt).toDateString()}
+              Ordered on - {new Date(date).toDateString()}
             </Typography>
           </CardContent>
         </React.Fragment>

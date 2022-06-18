@@ -5,14 +5,14 @@ import { getPastOrders } from "../api/order";
 import Layout from "../shared/Layout";
 import Order from "./Order";
 const OrdersList = () => {
-  const { user } = useContext(DataContext);
+  const { user, setLoading } = useContext(DataContext);
   const [orders, setOrders] = useState([]);
   const getOrders = async () => {
-    console.log(user.PhoneNumber);
+    setLoading(true);
     setOrders(await getPastOrders(user.PhoneNumber));
+    setLoading(false);
   };
   useEffect(() => {
-    console.log("Manik");
     getOrders();
   }, [user]);
   return (

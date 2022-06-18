@@ -40,9 +40,9 @@ const Footer = () => {
           >
             {" "}
             <CopyrightIcon />
-            2021 Daily Cater Technologies Inc.
+            2022 Amrut Technologies Inc.
           </Typography>
-          <Typography>singlamanik12@gmail.com</Typography>
+          <Typography>amrut.help@gmail.com</Typography>
         </Grid>
       </Layout>
     </Grid>

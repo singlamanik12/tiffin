@@ -27,7 +27,6 @@ const OrderForm = ({
   const [sellerAccount, setSellerAccount] = useState();
   const loadPayAccount = async () => {
     setSellerAccount(await payOrderAccount(SelID));
-    console.log(sellerAccount);
   };
   useEffect(() => {
     loadPayAccount();
@@ -47,7 +46,6 @@ const OrderForm = ({
           let price = 0;
           values.address = address;
           values.sellerAccount = sellerAccount;
-          console.log(values);
           if (values.menuOpt === "Veg Menu") {
             price = vegPrice;
           } else {
@@ -63,9 +61,9 @@ const OrderForm = ({
           values.ch_id = result.data.id;
           values.SelID = SelID;
           values.tname = tname;
+          values.paid = price - 0.05 * price;
           values = { ...values, ...user };
           const data = await saveOrder(values);
-          console.log(data);
           setLoading(false);
           window.location.href = result.data.url;
         } else {

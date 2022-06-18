@@ -21,6 +21,7 @@ const EnableColorOnDarkAppBar = () => {
             noWrap
             component="div"
             sx={{ flexGrow: 1 }}
+            style={{ cursor: "pointer" }}
             onClick={() => navigate(`/`)}
           >
             Amrut

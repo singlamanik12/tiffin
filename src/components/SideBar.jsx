@@ -39,6 +39,9 @@ export default function SideBar() {
         <ListItem button key="Home" onClick={() => navigate("/")}>
           <ListItemText primary="Home" />
         </ListItem>
+        <ListItem button key="Orders" onClick={() => navigate("/orders")}>
+          <ListItemText primary="Orders" />
+        </ListItem>
         <ListItem button key="SignOut" onClick={() => onSignOut()}>
           <ListItemText primary="SignOut" />
         </ListItem>

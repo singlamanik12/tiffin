@@ -42,7 +42,6 @@ export default function MenuChoice({ values }) {
     );
   };
   const handleSubmit = () => {
-    console.log(selected);
     localStorage.setItem("selected", JSON.stringify(selected));
   };
   return !done ? (
