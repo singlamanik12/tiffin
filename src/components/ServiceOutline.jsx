@@ -39,45 +39,44 @@ const ServiceOutline = ({ service }) => {
             {text.length > 190 && "..."}
           </Typography>
         </Grid>
-        <Grid item xs={12} container style={{ marginTop: "50px" }}>
-          <Grid item xs={8} container>
-            <Typography
-              style={{
-                fontSize: 17,
-                color: "white",
-                backgroundColor: "#00e600",
-                paddingInline: 10,
-                paddingBlock: 2,
-                borderRadius: 20,
-              }}
-            >
-              Veg - CA$ {vegPrice}
-            </Typography>{" "}
-            <Typography
-              style={{
-                fontSize: 17,
-                color: "white",
-                backgroundColor: "orange",
-                paddingInline: 10,
-                paddingBlock: 2,
-                borderRadius: 20,
-                marginLeft: 10,
-              }}
-            >
-              Non-Veg - CA$ {nvegPrice}
-            </Typography>{" "}
-          </Grid>
 
-          <Grid
-            item
-            xs={4}
-            container
-            justifyContent="right"
-            style={{ paddingTop: 2, cursor: "pointer" }}
-            onClick={() => navigate("/menu")}
+        <Grid item xs={12} container style={{ marginTop: "50px" }}>
+          <Typography
+            style={{
+              fontSize: 17,
+              color: "white",
+              backgroundColor: "#00e600",
+              paddingInline: 10,
+              paddingBlock: 2,
+              borderRadius: 20,
+            }}
           >
-            <ArrowForwardIcon />
-          </Grid>
+            Veg - CA$ {vegPrice}
+          </Typography>{" "}
+          <Typography
+            style={{
+              fontSize: 17,
+              color: "white",
+              backgroundColor: "orange",
+              paddingInline: 10,
+              paddingBlock: 2,
+              borderRadius: 20,
+              marginLeft: 10,
+            }}
+          >
+            Non-Veg - CA$ {nvegPrice}
+          </Typography>{" "}
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          container
+          justifyContent="right"
+          style={{ paddingTop: 2, cursor: "pointer" }}
+          onClick={() => navigate("/menu")}
+        >
+          <ArrowForwardIcon />
         </Grid>
       </Grid>
       <Grid item xs={12}>
