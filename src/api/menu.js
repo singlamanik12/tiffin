@@ -18,4 +18,9 @@ const getMenuByCity = async (values) => {
   return result;
 };
 
-export { updateMenu, getMenuBySelId, getMenuByCity };
+const getSellerById = async (values) => {
+  const result = await axios.get(api + "/seller/" + values.toString());
+  return result;
+};
+
+export { updateMenu, getMenuBySelId, getMenuByCity, getSellerById };

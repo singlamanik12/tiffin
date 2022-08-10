@@ -7,20 +7,20 @@ import DataContext from "../api/context";
 import Loading from "./../shared/Loading";
 import MdPhone from "@mui/icons-material/Phone";
 import Chip from "@mui/material/Chip";
-
+import { getSellerById } from "../api/menu";
 import OrderForm from "./OrderForm";
 
 export default function MenuChoice({ values }) {
   const { setOpen } = useContext(DataContext);
   const [done, setDone] = useState(false);
   const [selected, setSelected] = useState({});
-
+  const [phNum, setPhNum] = useState();
   const initialValues = JSON.parse(localStorage.getItem("selected"));
 
   useEffect(() => {
     setDone(true);
   }, []);
-  const menuOptions = ["Veg Menu", "Non-Veg Menu"];
+
   const {
     SelID,
     tname,
@@ -33,9 +33,16 @@ export default function MenuChoice({ values }) {
     nvegPrice,
     city,
   } = values;
+  const getPhoneNumber = async () => {
+    const { data } = await getSellerById(SelID);
+    setPhNum(data.PhoneNumber);
+  };
+  useEffect(() => getPhoneNumber(), [SelID]);
   const overviewHeading = "What's special about us";
   const rr = rrOpt.split("/").filter((n) => n);
   const rs = rsOpt.split("/").filter((n) => n);
+  const menuOptions =
+    nveg === "NA" ? ["Veg Menu"] : ["Veg Menu", "Non-Veg Menu"];
   const handleChange = (event) => {
     setSelected(
       Object.assign({}, selected, { [event.target.name]: event.target.value })
@@ -50,9 +57,10 @@ export default function MenuChoice({ values }) {
     <Layout>
       <Grid container direction="row">
         <Grid item xs={12} style={{ marginInline: 10, marginBlock: 5 }}>
-          <Typography variant="h5" style={{ fontWeight: "bold" }}>
+          <Typography variant="h5" style={{ fontWeight: "bold" }} gutterBottom>
             {tname}
           </Typography>
+          <Typography>{phNum}</Typography>
         </Grid>
         <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
           <Divider>
