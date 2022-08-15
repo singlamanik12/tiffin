@@ -57,7 +57,7 @@ const ServiceOutline = ({ service }) => {
           >
             Veg - CA$ {vegPrice}
           </Typography>{" "}
-          {nvegPrice != 0 && (
+          {nvegPrice !== 0 && (
             <Typography
               style={{
                 fontSize: 17,
