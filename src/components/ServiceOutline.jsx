@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, Grid, Divider } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
+import ImageCarousel from "./Carousel";
 const ServiceOutline = ({ service }) => {
   const { tname, vegPrice, nvegPrice, overview, _id } = service;
   let navigate = useNavigate();
@@ -14,6 +15,9 @@ const ServiceOutline = ({ service }) => {
         style={{ padding: 10, cursor: "pointer" }}
         onClick={() => navigate(`/menu/${_id}`)}
       >
+        <Grid item xs={12} style={{ marginBottom: 10 }}>
+          {service?.pics && <ImageCarousel pics={service?.pics} />}
+        </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">{tname}</Typography>
         </Grid>
@@ -53,19 +57,21 @@ const ServiceOutline = ({ service }) => {
           >
             Veg - CA$ {vegPrice}
           </Typography>{" "}
-          <Typography
-            style={{
-              fontSize: 17,
-              color: "white",
-              backgroundColor: "orange",
-              paddingInline: 10,
-              paddingBlock: 2,
-              borderRadius: 20,
-              marginLeft: 10,
-            }}
-          >
-            Non-Veg - CA$ {nvegPrice}
-          </Typography>{" "}
+          {nvegPrice != 0 && (
+            <Typography
+              style={{
+                fontSize: 17,
+                color: "white",
+                backgroundColor: "orange",
+                paddingInline: 10,
+                paddingBlock: 2,
+                borderRadius: 20,
+                marginLeft: 10,
+              }}
+            >
+              Non-Veg - CA$ {nvegPrice}
+            </Typography>
+          )}
         </Grid>
 
         <Grid
@@ -80,7 +86,7 @@ const ServiceOutline = ({ service }) => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Divider light style={{ marginBlock: 10 }} />
+        <Divider style={{ marginBlock: 10 }} />
       </Grid>
     </>
   );

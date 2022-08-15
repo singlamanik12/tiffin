@@ -9,6 +9,7 @@ import MdPhone from "@mui/icons-material/Phone";
 import Chip from "@mui/material/Chip";
 import { getSellerById } from "../api/menu";
 import OrderForm from "./OrderForm";
+import ImageCarousel from "./Carousel";
 
 export default function MenuChoice({ values }) {
   const { setOpen } = useContext(DataContext);
@@ -60,7 +61,7 @@ export default function MenuChoice({ values }) {
           <Typography variant="h5" style={{ fontWeight: "bold" }} gutterBottom>
             {tname}
           </Typography>
-          <Typography>{phNum}</Typography>
+          {values?.pics && <ImageCarousel pics={values.pics} />}
         </Grid>
         <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
           <Divider>

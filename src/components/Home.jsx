@@ -6,10 +6,13 @@ import FormControl from "@mui/material/FormControl";
 import { Select, Grid } from "@mui/material";
 import axios from "axios";
 import DataContext from "../api/context";
+import { getMenuByCity } from "../api/menu";
+import ServicesList from "./ServicesList";
 function Home() {
   const [citi, setCity] = React.useState("");
   const [cityList, setCityList] = React.useState([]);
   const { setLoading } = useContext(DataContext);
+  const [services, setServices] = React.useState([]);
   const onLoad = async () => {
     setLoading(true);
     const { data } = await axios.get(
@@ -17,6 +20,8 @@ function Home() {
     );
     setCityList(data.cities);
     setLoading(false);
+    const menus = await getMenuByCity("Brampton");
+    setServices(menus.data);
   };
   useEffect(() => onLoad(), []);
   const handleChange = (event) => {
@@ -40,6 +45,7 @@ function Home() {
           ))}
         </Select>
       </FormControl>
+      <ServicesList services={services} />
     </Layout>
   );
 }
