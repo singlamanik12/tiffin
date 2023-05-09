@@ -1,19 +1,13 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import Lottie from "react-lottie";
-import animationData from "../resources/failed.json";
+import failed from "../resources/failed.json";
+import Lottie from "lottie-react";
 const Failed = () => {
-  const defaultOptions = {
-    loop: false,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
   return (
-    <Grid item xs={12} container justifyItems="center">
-      <Lottie options={defaultOptions} height={400} width={400} />
+    <Grid container>
+      <Grid item xs={12} container justifyItems="center">
+        <Lottie animationData={failed} loop={true} />
+      </Grid>
     </Grid>
   );
 };

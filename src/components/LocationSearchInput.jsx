@@ -33,6 +33,8 @@ const LocationSearchInput = ({ setAddress, error }) => {
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <>
             <TextField
+              label="Address"
+              variant="outlined"
               fullWidth
               {...getInputProps({
                 placeholder: "Address",

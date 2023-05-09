@@ -32,7 +32,9 @@ export default function MenuChoice({ values }) {
     rsOpt,
     vegPrice,
     nvegPrice,
+    products,
     city,
+    interacEmail,
   } = values;
   const getPhoneNumber = async () => {
     const { data } = await getSellerById(SelID);
@@ -155,12 +157,14 @@ export default function MenuChoice({ values }) {
         menuOptions={menuOptions}
         rr={rr}
         rs={rs}
+        products={products}
         handleChange={handleChange}
         selected={selected}
         handleSubmit={handleSubmit}
         setOpen={setOpen}
         vegPrice={vegPrice}
         nvegPrice={nvegPrice}
+        interacEmail={interacEmail}
       />
     </Layout>
   );
