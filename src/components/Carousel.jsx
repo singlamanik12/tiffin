@@ -10,14 +10,11 @@ export default function ImageCarousel({ pics }) {
             src={pic.url}
             alt="DT Meals"
             style={{
-              height: "300px",
+              height: "250px",
               width: "100%",
               objectFit: "contain",
             }}
           />
-          <Carousel.Caption>
-            <p style={{ backgroundColor: "white" }}>{pic.caption}</p>
-          </Carousel.Caption>
         </Carousel.Item>
       ))}
     </Carousel>

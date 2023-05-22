@@ -33,6 +33,9 @@ export default function MenuChoice({ values }) {
     vegPrice,
     nvegPrice,
     products,
+    logo,
+    gallery,
+    serviceTypes,
     city,
     interacEmail,
   } = values;
@@ -59,10 +62,23 @@ export default function MenuChoice({ values }) {
   ) : (
     <Layout>
       <Grid container direction="row">
-        <Grid item xs={12} style={{ marginInline: 10, marginBlock: 5 }}>
-          <Typography variant="h5" style={{ fontWeight: "bold" }} gutterBottom>
+        <Grid
+          item
+          xs={12}
+          style={{ marginInline: 10, marginBlock: 5 }}
+          container
+          alignItems="center"
+        >
+          <img
+            style={{ height: 50, width: 50, borderRadius: 20, marginRight: 5 }}
+            src={logo}
+            alt="logo"
+          />
+          <Typography variant="h5" style={{ fontWeight: "bold" }}>
             {tname}
           </Typography>
+        </Grid>
+        <Grid item xs={12} style={{ marginBlock: 10 }}>
           {values?.pics && <ImageCarousel pics={values.pics} />}
         </Grid>
         <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
@@ -103,8 +119,32 @@ export default function MenuChoice({ values }) {
             </Typography>
           </Divider>
         </Grid>
-        <Grid item xs={12}></Grid>
-        <OptionTemplate
+        <Grid
+          item
+          xs={12}
+          container
+          alignItems="center"
+          justifyContent="center"
+        >
+          {products.map((product) => (
+            <>
+              <Grid item xs={12} container justifyContent="center">
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: "bolder", marginBottom: 5 }}
+                >
+                  {product?.prodName}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} container justifyContent="center">
+                <Typography style={{ marginBottom: 10 }}>
+                  {product?.description}
+                </Typography>
+              </Grid>
+            </>
+          ))}
+        </Grid>
+        {/* <OptionTemplate
           data={veg}
           type="Veg Menu"
           color="#00e600"
@@ -115,7 +155,7 @@ export default function MenuChoice({ values }) {
           type="Non-Veg Menu"
           color="orange"
           price={nvegPrice}
-        />
+        /> */}
         <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
           <Divider>
             <Typography
@@ -158,6 +198,9 @@ export default function MenuChoice({ values }) {
         rr={rr}
         rs={rs}
         products={products}
+        logo={logo}
+        gallery={gallery}
+        serviceTypes={serviceTypes}
         handleChange={handleChange}
         selected={selected}
         handleSubmit={handleSubmit}

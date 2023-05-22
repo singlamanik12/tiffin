@@ -16,7 +16,7 @@ function Home() {
   const onLoad = async () => {
     setLoading(true);
     const { data } = await axios.get(
-      "https://singlamanik12.github.io/cities/ca.json"
+      "https://singlamanik12.github.io/tiffin-conf/ca.json"
     );
     setCityList(data.cities);
     setLoading(false);
