@@ -12,13 +12,17 @@ const ServiceOutline = ({ service }) => {
     <>
       <Grid
         container
-        style={{ padding: 10, cursor: "pointer" }}
+        style={{ cursor: "pointer" }}
         onClick={() => navigate(`/menu/${_id}`)}
       >
         <Grid item xs={12} style={{ marginBottom: 10 }}>
-          {service?.pics && <ImageCarousel pics={service?.pics} />}
+          <img
+            style={{ width: "100%", height: "200px" }}
+            src={service.pics[0].url}
+            alt="logo"
+          />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ padding: 10 }}>
           <Typography variant="h5">{tname}</Typography>
         </Grid>
         {/* <Grid
@@ -37,14 +41,14 @@ const ServiceOutline = ({ service }) => {
           We provide sweets on every friday included.
         </Typography>
       </Grid> */}
-        <Grid item xs={12} style={{ marginTop: 10, color: "#808080" }}>
-          <Typography variant="body1">
+        <Grid item xs={12} style={{ color: "#808080", paddingInline: 10 }}>
+          <Typography variant="caption">
             {text.substring(0, 190)}
             {text.length > 190 && "..."}
           </Typography>
         </Grid>
 
-        <Grid item xs={12} container style={{ marginTop: "50px" }}>
+        {/* <Grid item xs={12} container style={{ marginTop: "50px" }}>
           <Typography
             style={{
               fontSize: 17,
@@ -72,7 +76,7 @@ const ServiceOutline = ({ service }) => {
               Non-Veg - CA$ {nvegPrice}
             </Typography>
           )}
-        </Grid>
+        </Grid> */}
 
         <Grid
           item

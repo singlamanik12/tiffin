@@ -9,6 +9,7 @@ import Select from "@mui/material/Select";
 import { useParams } from "react-router-dom";
 import { getMenuByCity } from "../api/menu";
 import DataContext from "../api/context";
+import { Grid } from "@mui/material";
 const Search = () => {
   const [citi, setCity] = React.useState("");
   const [cityList, setCityList] = React.useState([]);
@@ -30,30 +31,34 @@ const Search = () => {
     );
     const { data } = await getMenuByCity(res);
     setCity(res);
+    console.log("Manik", data);
     setServices(data);
     setLoading(false);
   };
   const handleChange = (event) => {
     window.location.href = `/services/${event.target.value}`;
   };
+  console.log("Manik", services);
   return (
     <Layout style={{ paddingTop: "30px" }}>
-      <FormControl fullWidth style={{ marginBottom: "20px" }}>
-        <InputLabel id="demo-simple-select-label">City</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={citi}
-          label="City"
-          onChange={handleChange}
-        >
-          {cityList.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Grid container style={{ paddingInline: 10 }}>
+        <FormControl fullWidth style={{ marginBottom: "20px" }}>
+          <InputLabel id="demo-simple-select-label">City</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={citi}
+            label="City"
+            onChange={handleChange}
+          >
+            {cityList.map((item) => (
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
       <ServicesList services={services} />
     </Layout>
   );

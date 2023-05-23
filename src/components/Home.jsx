@@ -20,7 +20,7 @@ function Home() {
     );
     setCityList(data.cities);
     setLoading(false);
-    const menus = await getMenuByCity("Brampton");
+    const menus = await getMenuByCity();
     setServices(menus.data);
   };
   useEffect(() => onLoad(), []);
@@ -29,22 +29,24 @@ function Home() {
   };
   return (
     <Layout style={{ paddingTop: 70 }}>
-      <FormControl fullWidth style={{ marginBottom: "20px" }}>
-        <InputLabel id="demo-simple-select-label">City</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={citi}
-          label="City"
-          onChange={handleChange}
-        >
-          {cityList.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Grid container style={{ paddingInline: 10 }}>
+        <FormControl fullWidth style={{ marginBottom: "20px" }}>
+          <InputLabel id="demo-simple-select-label">City</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={citi}
+            label="City"
+            onChange={handleChange}
+          >
+            {cityList.map((item) => (
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
       <ServicesList services={services} />
     </Layout>
   );

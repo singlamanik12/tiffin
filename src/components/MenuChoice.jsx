@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Divider, Grid, Typography, Button } from "@mui/material";
+import { Divider, Grid, Typography, Button, IconButton } from "@mui/material";
 import OptionTemplate from "./OptionTemplate";
 import OptionSelect from "./OptionSelect";
 import Layout from "../shared/Layout";
@@ -9,7 +9,10 @@ import MdPhone from "@mui/icons-material/Phone";
 import Chip from "@mui/material/Chip";
 import { getSellerById } from "../api/menu";
 import OrderForm from "./OrderForm";
+import ShareIcon from "@mui/icons-material/Share";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import ImageCarousel from "./Carousel";
+import Lora from "../resources/Lora-Regular.ttf";
 
 export default function MenuChoice({ values }) {
   const { setOpen } = useContext(DataContext);
@@ -33,10 +36,13 @@ export default function MenuChoice({ values }) {
     vegPrice,
     nvegPrice,
     products,
+    address,
     logo,
     gallery,
     serviceTypes,
     city,
+    pics,
+    phoneNumber,
     interacEmail,
   } = values;
   const getPhoneNumber = async () => {
@@ -62,89 +68,121 @@ export default function MenuChoice({ values }) {
   ) : (
     <Layout>
       <Grid container direction="row">
-        <Grid
-          item
-          xs={12}
-          style={{ marginInline: 10, marginBlock: 5 }}
-          container
-          alignItems="center"
-        >
+        <Grid item xs={12}>
           <img
-            style={{ height: 50, width: 50, borderRadius: 20, marginRight: 5 }}
-            src={logo}
+            style={{ width: "100%", height: "200px" }}
+            src={pics[0].url}
             alt="logo"
           />
-          <Typography variant="h5" style={{ fontWeight: "bold" }}>
-            {tname}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} style={{ marginBlock: 10 }}>
-          {values?.pics && <ImageCarousel pics={values.pics} />}
-        </Grid>
-        <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
-          <Divider>
-            <Typography
-              variant="h6"
+          {window.innerWidth < 767 && (
+            <IconButton
               style={{
-                backgroundColor: "#ffd0d5",
-                paddingInline: 10,
-                borderRadius: 20,
+                position: "absolute",
+                top: "70px",
+                right: "16px",
+                backgroundColor: "white",
+              }}
+              alignItems="center"
+              justifyContent="center"
+              onClick={async () =>
+                await navigator.share({
+                  title: tname,
+                  text: `Order your tiffin from ${tname} today on DT Meals`,
+                  url: window.location.href,
+                })
+              }
+            >
+              <ShareOutlinedIcon fontSize="small" style={{ color: "black" }} />
+            </IconButton>
+          )}
+        </Grid>
+        <Grid item xs={12} style={{ padding: "8px" }}>
+          <Grid
+            item
+            xs={12}
+            style={{ marginBottom: 20 }}
+            container
+            justifyContent="center"
+            direction={"column"}
+          >
+            {/* <img
+            style={{
+              height: "39px",
+              width: "39px",
+              borderRadius: 20,
+              marginRight: 10,
+            }}
+            src={logo}
+            alt="logo"
+          /> */}
+            <Typography
+              style={{
+                fontWeight: "700",
+                fontSize: "39px",
+              }}
+            >
+              {tname}
+            </Typography>
+            <Typography variant="caption" style={{ color: "gray" }}>
+              +1{phoneNumber}
+            </Typography>
+            <Typography variant="caption" style={{ color: "gray" }}>
+              {address}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} style={{ marginBottom: 10, marginTop: 20 }}>
+            <Typography
+              style={{
+                fontSize: "24px",
+                fontWeight: "700",
               }}
             >
               {overviewHeading}
             </Typography>
-          </Divider>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          style={{ marginLeft: 10 }}
-          container
-          alignItems={true}
-          justifyContent={true}
-        >
-          <Typography align="center">{overview}</Typography>
-        </Grid>
-        <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
-          <Divider>
-            <Typography
-              variant="h6"
-              style={{
-                backgroundColor: "#ffd0de",
-                paddingInline: 10,
-                borderRadius: 20,
-              }}
-            >
-              Menu Options
-            </Typography>
-          </Divider>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          container
-          alignItems="center"
-          justifyContent="center"
-        >
-          {products.map((product) => (
-            <>
-              <Grid item xs={12} container justifyContent="center">
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: "bolder", marginBottom: 5 }}
-                >
-                  {product?.prodName}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} container justifyContent="center">
-                <Typography style={{ marginBottom: 10 }}>
-                  {product?.description}
-                </Typography>
-              </Grid>
-            </>
-          ))}
-        </Grid>
-        {/* <OptionTemplate
+          </Grid>
+          <Grid item xs={12} container>
+            <Typography align="center">{overview}</Typography>
+          </Grid>
+          <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
+            <Divider>
+              <Typography
+                variant="h6"
+                style={{
+                  backgroundColor: "#ffd0de",
+                  paddingInline: 10,
+                  borderRadius: 20,
+                }}
+              >
+                Menu Options
+              </Typography>
+            </Divider>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            container
+            alignItems="center"
+            justifyContent="center"
+          >
+            {products.map((product) => (
+              <>
+                <Grid item xs={12} container justifyContent="center">
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: "bolder", marginBottom: 5 }}
+                  >
+                    {product?.prodName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} container justifyContent="center">
+                  <Typography style={{ marginBottom: 10 }}>
+                    {product?.description}
+                  </Typography>
+                </Grid>
+              </>
+            ))}
+          </Grid>
+          {/* <OptionTemplate
           data={veg}
           type="Veg Menu"
           color="#00e600"
@@ -156,59 +194,56 @@ export default function MenuChoice({ values }) {
           color="orange"
           price={nvegPrice}
         /> */}
-        <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
-          <Divider>
+          <Grid item xs={12} style={{ marginBottom: 20, marginTop: 20 }}>
+            <Divider>
+              <Typography
+                variant="h6"
+                style={{
+                  backgroundColor: "#ffd0de",
+                  paddingInline: 10,
+                  borderRadius: 20,
+                }}
+              >
+                Cities Available
+              </Typography>
+            </Divider>
+          </Grid>
+          {city.map((item) => (
+            <Chip
+              style={{ marginRight: 10 }}
+              label={<Typography>{item}</Typography>}
+            />
+          ))}
+          <Grid item xs={12} style={{ marginTop: 50, marginBottom: 10 }}>
             <Typography
-              variant="h6"
               style={{
-                backgroundColor: "#ffd0de",
-                paddingInline: 10,
-                borderRadius: 20,
-              }}
-            >
-              Cities Available
-            </Typography>
-          </Divider>
-        </Grid>
-        {city.map((item) => (
-          <Chip
-            style={{ marginRight: 10 }}
-            label={<Typography>{item}</Typography>}
-          />
-        ))}
-        <Grid item xs={12} style={{ marginTop: 20, marginBottom: 20 }}>
-          <Divider>
-            <Typography
-              variant="h6"
-              style={{
-                backgroundColor: "#ffd0de",
-                paddingInline: 10,
-                borderRadius: 20,
+                fontSize: "24px",
+                fontWeight: "700",
               }}
             >
               Place your order
             </Typography>
-          </Divider>
+          </Grid>
         </Grid>
+        <OrderForm
+          SelID={SelID}
+          tname={tname}
+          menuOptions={menuOptions}
+          rr={rr}
+          rs={rs}
+          products={products}
+          logo={logo}
+          gallery={gallery}
+          serviceTypes={serviceTypes}
+          handleChange={handleChange}
+          selected={selected}
+          handleSubmit={handleSubmit}
+          setOpen={setOpen}
+          vegPrice={vegPrice}
+          nvegPrice={nvegPrice}
+          interacEmail={interacEmail}
+        />
       </Grid>
-      <OrderForm
-        SelID={SelID}
-        tname={tname}
-        menuOptions={menuOptions}
-        rr={rr}
-        rs={rs}
-        products={products}
-        logo={logo}
-        gallery={gallery}
-        serviceTypes={serviceTypes}
-        handleChange={handleChange}
-        selected={selected}
-        handleSubmit={handleSubmit}
-        setOpen={setOpen}
-        vegPrice={vegPrice}
-        nvegPrice={nvegPrice}
-        interacEmail={interacEmail}
-      />
     </Layout>
   );
 }

@@ -168,7 +168,7 @@ const OrderForm = ({
   return (
     <>
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
-        <Grid item container direction="row">
+        <Grid item container direction="row" style={{ padding: "8px" }}>
           <FormControl fullWidth style={{ marginTop: 10, marginBottom: 10 }}>
             <InputLabel id={"prodType"}>Select Type</InputLabel>
             <Select
@@ -265,14 +265,15 @@ const OrderForm = ({
                 id={"rrOpt"}
                 name={"rrOpt"}
                 value={formik.values.rrOpt}
-                label={"Select roti/rice option"}
+                label={"Select default option"}
                 onChange={(e) => {
                   formik.setFieldValue("rrOpt", e.target.value);
                 }}
+                style={{ fontSize: 16 }}
                 error={formik.touched.rrOpt && Boolean(formik.errors.rrOpt)}
               >
                 {rrOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
+                  <MenuItem key={index} value={option} style={{ fontSize: 16 }}>
                     {Object.keys(option).map(
                       (key) =>
                         (option[key] > 0
@@ -299,6 +300,9 @@ const OrderForm = ({
                     name={`x${option}`}
                     label={`Extra ${_.capitalize(option)}`}
                     type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     variant="outlined"
                     inputProps={{ min: 0 }}
                     value={
@@ -359,10 +363,7 @@ const OrderForm = ({
           {formik.values.serviceType !== "Pickup" && (
             <LocationSearchInput setAddress={setAddress} error={addErr} />
           )}
-          <Typography
-            variant={"h5"}
-            style={{ fontWeight: "bolder", marginTop: 50 }}
-          >
+          <Typography variant={"h6"} style={{ marginTop: 50 }}>
             Order Summary
           </Typography>
           <Grid item xs={12} container>
@@ -532,7 +533,7 @@ const OrderForm = ({
               fullWidth
               style={{ marginTop: 20 }}
             >
-              Place Order
+              Order
             </Button>
           )}
         </Grid>

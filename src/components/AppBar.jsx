@@ -12,35 +12,46 @@ const EnableColorOnDarkAppBar = () => {
   const { setOpen, user } = useContext(DataContext);
   let navigate = useNavigate();
   return (
-    <Stack spacing={2} sx={{ flexGrow: 1, marginBottom: 2, zIndex: -1 }}>
+    <Stack spacing={2} sx={{ flexGrow: 1, zIndex: -1 }}>
       <AppBar
         position="static"
         elevation={0}
         style={{ backgroundColor: "white" }}
       >
-        <Toolbar>
+        <Toolbar style={{ padding: 0 }}>
           <SideBar />
           <Typography
-            variant="h5"
             noWrap
             component="div"
             sx={{ flexGrow: 1 }}
-            style={{ cursor: "pointer", color: "black" }}
+            style={{ cursor: "pointer", color: "black", fontSize: "20px" }}
             onClick={() => navigate(`/`)}
           >
-            DT Meals
+            DT <span style={{ fontWeight: "bolder" }}>Meals</span>
           </Typography>
           {/* <Button color="inherit" onClick={() => setOpen(true)}>
       Login/SignUp
     </Button> */}
           {!!user ? (
-            <Typography color="black">
+            <Typography
+              variant="caption"
+              color="black"
+              style={{ marginRight: 5 }}
+            >
               {user.FirstName} {user.LastName}
             </Typography>
           ) : (
-            <Button style={{ color: "black" }} onClick={() => setOpen(true)}>
+            <div
+              style={{
+                color: "black",
+                backgroundColor: "gray",
+                padding: 5,
+                borderRadius: 10,
+              }}
+              onClick={() => setOpen(true)}
+            >
               Sign In
-            </Button>
+            </div>
           )}
         </Toolbar>
       </AppBar>
