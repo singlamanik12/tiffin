@@ -14,11 +14,22 @@ const payOrderAccount = async (values) => {
 };
 const saveOrder = async (values) => {
   const { data } = await axios.post(api + "/order/new", values);
-  return data.PayAccount;
+  return data;
 };
 
 const getPastOrders = async (values) => {
   const { data } = await axios.get(api + "/order/past/" + values);
   return data;
 };
-export { postOrder, payOrder, payOrderAccount, saveOrder, getPastOrders };
+const getPendingOrders = async (values) => {
+  const { data } = await axios.post(api + "/pending/orders", values);
+  return data;
+};
+export {
+  postOrder,
+  payOrder,
+  payOrderAccount,
+  saveOrder,
+  getPastOrders,
+  getPendingOrders,
+};

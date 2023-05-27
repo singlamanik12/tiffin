@@ -42,6 +42,7 @@ export default function MenuChoice({ values }) {
     serviceTypes,
     city,
     pics,
+    isVerified,
     phoneNumber,
     interacEmail,
   } = values;
@@ -123,12 +124,27 @@ export default function MenuChoice({ values }) {
             >
               {tname}
             </Typography>
-            <Typography variant="caption" style={{ color: "gray" }}>
-              +1{phoneNumber}
-            </Typography>
-            <Typography variant="caption" style={{ color: "gray" }}>
-              {address}
-            </Typography>
+            <Grid
+              item
+              xs={12}
+              container
+              style={{
+                backgroundColor: "whitesmoke",
+                padding: 10,
+                borderRadius: 20,
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography variant="caption" style={{ color: "gray" }}>
+                  +1{phoneNumber}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="caption" style={{ color: "gray" }}>
+                  {address}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} style={{ marginBottom: 10, marginTop: 20 }}>
             <Typography
@@ -210,6 +226,7 @@ export default function MenuChoice({ values }) {
           </Grid>
           {city.map((item) => (
             <Chip
+              key={item}
               style={{ marginRight: 10 }}
               label={<Typography>{item}</Typography>}
             />
@@ -235,6 +252,7 @@ export default function MenuChoice({ values }) {
           logo={logo}
           gallery={gallery}
           serviceTypes={serviceTypes}
+          isVerified={isVerified}
           handleChange={handleChange}
           selected={selected}
           handleSubmit={handleSubmit}

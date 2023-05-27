@@ -9,6 +9,7 @@ import {
   TextField,
   Typography,
   FormControl,
+  Snackbar,
 } from "@mui/material";
 import LocationSearchInput from "./LocationSearchInput";
 import { useFormik } from "formik";
@@ -19,46 +20,30 @@ import { payOrder, payOrderAccount, saveOrder } from "../api/order";
 import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const OrderSchema = Yup.object().shape({
-  menuOpt: Yup.string().required("Required"),
-  rrOpt: Yup.object()
-    .shape({
-      roti: Yup.number().required("Required"),
-      rice: Yup.number().required("Required"),
-    })
-    .required("Required"),
-  rsOpt: Yup.string().required("Required"),
-  selPlan: Yup.object()
-    .shape({
-      planName: Yup.string().required(),
-    })
-    .required("Required"),
+  menuOpt: Yup.object().shape({}).required("Required"),
+  rrOpt: Yup.object().shape({}).required("Required"),
+  selPlan: Yup.object().shape({}).required("Required"),
   prodType: Yup.object().shape({}).required("Required"),
   request: Yup.string(),
-  planName: Yup.string().required("Required"),
   price: Yup.string().required("Required"),
-  sDate: Yup.date().required(),
-  days: Yup.number().required("Required"),
+  sDate: Yup.date().required("Required"),
+  eDate: Yup.date().required("Required"),
   confNum: Yup.string().required("Required"),
   deliveryCharges: Yup.string().required("Required"),
-  serviceType: Yup.string().required("Required"),
+  serviceOpt: Yup.string().required("Required"),
 });
 const OrderForm = ({
   SelID,
   tname,
-  rr,
-  rs,
   vegPrice,
   nvegPrice,
   products,
-  logo,
-  gallery,
   serviceTypes,
   interacEmail,
-  selected,
-  handleChange,
-  handleSubmit,
+  isVerified,
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
@@ -70,21 +55,20 @@ const OrderForm = ({
   const [extras, setExtras] = useState({});
   const [extrasOptions, setExtrasOptions] = useState([]);
   const [systemExtras, setSystemExtras] = useState({});
-  const [total, setTotal] = useState();
+  const [cost, setCost] = useState();
+  const [subTotal, setSubTotal] = useState();
+  const [snack, setSnack] = useState(false);
   const [initial, setInitial] = useState({
     prodType: "",
     menuOpt: "",
     rrOpt: "",
-    rsOpt: "",
     selPlan: "",
     request: "",
-    planName: "",
     days: 0,
     deliveryCharges: "",
-    price: 0,
-    sDate: moment().format("YYYY-MM-DD"),
+    sDate: "",
     confNum: "",
-    serviceType: "Delivery",
+    serviceOpt: "Delivery",
   });
   const loadPayAccount = async () => {
     setSellerAccount(await payOrderAccount(SelID));
@@ -107,9 +91,19 @@ const OrderForm = ({
     let total =
       extrastotal +
       parseFloat(values?.price) +
-      (values?.serviceType === "Delivery"
+      (values?.serviceOpt === "Delivery"
         ? parseFloat(values.deliveryCharges)
         : 0);
+    // if (total === subTotal && total !== 0) {
+    //   setCost({
+    //     subTotal: !isNaN(total) ? total.toFixed(2) : (0).toFixed(2),
+    //     tax: !isNaN(total) ? (total * 0.13).toFixed(2) : (0).toFixed(2),
+    //     price: !isNaN(total)
+    //       ? (total + total * 0.13).toFixed(2)
+    //       : (0).toFixed(2),
+    //   });
+    //   setSubTotal(total);
+    // }
     if (type === "tax") {
       return !isNaN(total) ? (total * 0.13).toFixed(2) : (0).toFixed(2);
     }
@@ -128,33 +122,37 @@ const OrderForm = ({
     enableReinitialize: true,
     validationSchema: OrderSchema,
     onSubmit: async (values) => {
-      console.log("MAnik");
-      if (values.serviceType === "Pickup" && address) {
+      console.log(values, user);
+      if (values.serviceOpt === "Pickup" || address) {
         if (user) {
           setLoading(true);
-          let price = 0;
-          values.address = address;
-          values.sellerAccount = sellerAccount;
-          if (values.menuOpt === "Veg Menu") {
-            price = vegPrice;
-          } else {
-            price = nvegPrice;
+          if (values.serviceOpt !== "Pickup") {
+            values.address = address;
           }
-          values.price = price;
-          const result = await payOrder({
-            tname: tname,
-            price: price * 100,
-            sellerAccount: sellerAccount,
-          });
-          values.checkout = result.data;
-          values.ch_id = result.data.id;
+          // console.log(cost);
+          // values.sellerAccount = sellerAccount;
+          values.price = getTotal(values, "cost");
+          values.tax = getTotal(values, "tax");
+          values.subTotal = getTotal(values, "");
+          // const result = await payOrder({
+          //   tname: tname,
+          //   price: price * 100,
+          //   sellerAccount: sellerAccount,
+          // });
+          // values.checkout = result.data;
+          // values.ch_id = result.data.id;
           values.SelID = SelID;
           values.tname = tname;
-          values.paid = price - 0.05 * price;
-          values = { ...values, ...user };
-          const data = await saveOrder(values);
+          // let extrasOpt = [];
+          // extrasOptions?.map((option) => {
+          //      extrasOpt.push({option:  values[`x${option}`]})
+          // })
+          // values.paid = price - 0.05 * price;
+          let temp = Object.assign({}, values, user);
+          // console.log(values.subTotal);
+          const data = await saveOrder(temp);
           setLoading(false);
-          window.location.href = result.data.url;
+          window.location.href = "/orders";
         } else {
           setOpen(true);
         }
@@ -170,6 +168,12 @@ const OrderForm = ({
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
         <Grid item container direction="row" style={{ padding: "8px" }}>
           <FormControl fullWidth style={{ marginTop: 10, marginBottom: 10 }}>
+            <Snackbar
+              open={snack}
+              autoHideDuration={2000}
+              onClose={() => setSnack(false)}
+              message="Copied to clipboard"
+            />
             <InputLabel id={"prodType"}>Select Type</InputLabel>
             <Select
               id="prodType"
@@ -269,22 +273,24 @@ const OrderForm = ({
                 onChange={(e) => {
                   formik.setFieldValue("rrOpt", e.target.value);
                 }}
-                style={{ fontSize: 16 }}
                 error={formik.touched.rrOpt && Boolean(formik.errors.rrOpt)}
               >
                 {rrOptions.map((option, index) => (
-                  <MenuItem key={index} value={option} style={{ fontSize: 16 }}>
-                    {Object.keys(option).map(
-                      (key) =>
-                        (option[key] > 0
-                          ? option[key] === 1
-                            ? ""
-                            : option[key]
-                          : " no") +
-                        " " +
-                        _.capitalize(key) +
-                        " \\"
-                    )}
+                  <MenuItem key={index} value={option}>
+                    {Object.keys(option).map((key) => {
+                      if (key === "roti" || key === "rice") {
+                        return (
+                          (option[key] > 0
+                            ? option[key] === 1
+                              ? ""
+                              : option[key]
+                            : " no") +
+                          " " +
+                          _.capitalize(key) +
+                          " \\"
+                        );
+                      }
+                    })}
                   </MenuItem>
                 ))}
               </Select>
@@ -311,7 +317,7 @@ const OrderForm = ({
                         : formik.values[`x${option}`]
                     }
                     onChange={(e) => {
-                      if (e.target.value >= 0) {
+                      if (e.target.value >= 0 && e.target.value <= 10) {
                         console.log(e.target.value);
                         formik.setFieldValue(`x${option}`, e.target.value);
                       }
@@ -324,6 +330,35 @@ const OrderForm = ({
                 </Grid>
               ))}
           </Grid>
+          {formik.values.selPlan?.days && (
+            <Grid item xs={12} container alignItems="center">
+              {/* <Typography style={{ marginRight: 10 }}>Start Date</Typography> */}
+              <TextField
+                style={{ marginBlock: 10 }}
+                id="sDate"
+                fullWidth
+                name="sDate"
+                type="date"
+                label="Start Date"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={formik.values?.sDate}
+                onChange={(e) => {
+                  formik.setFieldValue("sDate", e.target.value);
+                  formik.setFieldValue(
+                    "eDate",
+                    moment(e.target.value, "YYYY-MM-DD")
+                      .add(formik.values.selPlan?.days, "days")
+                      .format("YYYY-MM-DD")
+                  );
+                }}
+                error={formik.touched.sDate && Boolean(formik.errors.sDate)}
+                helperText={formik.touched.sDate && formik.errors.sDate}
+              />
+            </Grid>
+          )}
           <TextField
             fullWidth
             id="request"
@@ -337,19 +372,18 @@ const OrderForm = ({
           />
           {serviceTypes?.length > 0 && (
             <FormControl fullWidth style={{ marginTop: 10, marginBottom: 10 }}>
-              <InputLabel id={"serviceType"}>Select Service</InputLabel>
+              <InputLabel id={"serviceOpt"}>Select Service</InputLabel>
               <Select
-                labelId={"serviceType"}
-                id={"serviceType"}
-                name={"serviceType"}
-                value={formik.values.serviceType}
+                labelId={"serviceOpt"}
+                id={"serviceOpt"}
+                name={"serviceOpt"}
+                value={formik.values.serviceOpt}
                 label={"Service Type"}
                 onChange={(e) => {
-                  formik.setFieldValue("serviceType", e.target.value);
+                  formik.setFieldValue("serviceOpt", e.target.value);
                 }}
                 error={
-                  formik.touched.serviceType &&
-                  Boolean(formik.errors.serviceType)
+                  formik.touched.serviceOpt && Boolean(formik.errors.serviceOpt)
                 }
               >
                 {serviceTypes.map((option) => (
@@ -360,7 +394,7 @@ const OrderForm = ({
               </Select>
             </FormControl>
           )}
-          {formik.values.serviceType !== "Pickup" && (
+          {formik.values.serviceOpt !== "Pickup" && (
             <LocationSearchInput setAddress={setAddress} error={addErr} />
           )}
           <Typography variant={"h6"} style={{ marginTop: 50 }}>
@@ -400,16 +434,18 @@ const OrderForm = ({
                 );
               })}
 
-              {!!formik.values.selPlan?.days && (
-                <Typography>
-                  Ends on - {""}
-                  <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                    {moment(formik.values?.sDate, "YYYY-MM-DD")
-                      .add(formik.values.selPlan?.days, "days")
-                      .format("YYYY-MM-DD")}
-                  </span>
-                </Typography>
-              )}
+              {/* {!!formik.values.selPlan?.days && (
+                <Grid style={{ backgroundColor: "whitesmoke" }}>
+                  <Typography>
+                    Ends on
+                    <Typography style={{ fontWeight: "bolder", fontSize: 20 }}>
+                      {moment(formik.values?.sDate, "YYYY-MM-DD")
+                        .add(formik.values.selPlan?.days, "days")
+                        .format("YYYY-MM-DD")}
+                    </Typography>
+                  </Typography>
+                </Grid>
+              )} */}
             </Grid>
             <Grid item xs={6}>
               <Grid
@@ -487,6 +523,22 @@ const OrderForm = ({
               </Grid>
             </Grid>
           </Grid>
+          {!!formik.values.selPlan?.days && (
+            <Grid
+              style={{
+                backgroundColor: "whitesmoke",
+                padding: 10,
+                borderRadius: 20,
+              }}
+            >
+              <Typography>
+                Ends on -{" "}
+                <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                  {formik.values?.eDate}
+                </span>
+              </Typography>
+            </Grid>
+          )}
           <Grid item xs={12} container>
             <Typography variant="h6" style={{ marginTop: 10 }}>
               Confirmation number
@@ -508,8 +560,17 @@ const OrderForm = ({
             >
               <InfoIcon color="warning" style={{ marginRight: 10 }} />
               Please interac the amount to{" "}
-              <span style={{ fontWeight: "bolder" }}>{interacEmail}</span> and
-              enter the confirmation number below
+              <span style={{ fontWeight: "bolder" }}>{interacEmail}</span>{" "}
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigator.clipboard.writeText(interacEmail);
+                  setSnack(true);
+                }}
+              >
+                <ContentCopyIcon />
+              </span>{" "}
+              and enter the confirmation number below
             </Typography>
           </Grid>
           <TextField
@@ -521,7 +582,7 @@ const OrderForm = ({
             style={{ marginBottom: 20 }}
             error={formik.touched.confNum && Boolean(formik.errors.confNum)}
           />
-          {!!!sellerAccount ? (
+          {!!!sellerAccount || !isVerified ? (
             <Typography color="secondary">
               Seller currently doesn't accept any orders
             </Typography>

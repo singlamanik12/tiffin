@@ -24,7 +24,12 @@ const EnableColorOnDarkAppBar = () => {
             noWrap
             component="div"
             sx={{ flexGrow: 1 }}
-            style={{ cursor: "pointer", color: "black", fontSize: "20px" }}
+            style={{
+              cursor: "pointer",
+              color: "black",
+              fontSize: "20px",
+              marginLeft: 5,
+            }}
             onClick={() => navigate(`/`)}
           >
             DT <span style={{ fontWeight: "bolder" }}>Meals</span>
@@ -44,13 +49,16 @@ const EnableColorOnDarkAppBar = () => {
             <div
               style={{
                 color: "black",
-                backgroundColor: "gray",
+                backgroundColor: "#F5F5F5",
                 padding: 5,
                 borderRadius: 10,
+                marginRight: 5,
               }}
               onClick={() => setOpen(true)}
             >
-              Sign In
+              <Typography variant="caption" style={{ fontSize: 12 }}>
+                Sign In
+              </Typography>
             </div>
           )}
         </Toolbar>
