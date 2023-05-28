@@ -281,18 +281,16 @@ const OrderForm = ({
                 {rrOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {Object.keys(option).map((key) => {
-                      if (key === "roti" || key === "rice") {
-                        return (
-                          (option[key] > 0
-                            ? option[key] === 1
-                              ? ""
-                              : option[key]
-                            : " no") +
-                          " " +
-                          _.capitalize(key) +
-                          " \\"
-                        );
-                      }
+                      return (
+                        (option[key] > 0
+                          ? option[key] === 1
+                            ? ""
+                            : option[key]
+                          : " no") +
+                        " " +
+                        _.capitalize(key) +
+                        " \\"
+                      );
                     })}
                   </MenuItem>
                 ))}

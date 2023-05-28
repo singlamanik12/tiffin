@@ -106,24 +106,26 @@ export default function MenuChoice({ values }) {
             justifyContent="center"
             direction={"column"}
           >
-            {/* <img
-            style={{
-              height: "39px",
-              width: "39px",
-              borderRadius: 20,
-              marginRight: 10,
-            }}
-            src={logo}
-            alt="logo"
-          /> */}
-            <Typography
-              style={{
-                fontWeight: "700",
-                fontSize: "39px",
-              }}
-            >
-              {tname}
-            </Typography>
+            <Grid item xs={12} container alignItems="center">
+              <img
+                style={{
+                  height: "45px",
+                  width: "45px",
+                  borderRadius: 20,
+                  marginRight: 10,
+                }}
+                src={logo}
+                alt="logo"
+              />
+              <Typography
+                style={{
+                  fontWeight: "700",
+                  fontSize: "39px",
+                }}
+              >
+                {tname}
+              </Typography>
+            </Grid>
             <Grid
               item
               xs={12}
