@@ -1,3 +1,3 @@
-const api = "http://localhost:4000";
+const api = "https://api.vishu-singla.com";
 
 export default api;
