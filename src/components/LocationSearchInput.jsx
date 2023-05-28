@@ -5,18 +5,18 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import TextField from "@mui/material/TextField";
 
-const LocationSearchInput = ({ setAddress, error }) => {
-  const [locAddress, setLocAddress] = useState();
+const LocationSearchInput = ({ setAddress, error, setCoord, address }) => {
+  const [locAddress, setLocAddress] = useState(address);
   const [touched, setTouched] = useState(false);
   const handleChange = (address) => {
-    setLocAddress(address);
+    setAddress(address);
     setTouched(true);
   };
 
   const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log("Success", latLng))
+      .then((latLng) => setCoord(latLng))
       .catch((error) => console.error("Error", error));
     setLocAddress(address);
     setAddress(address);
@@ -25,7 +25,7 @@ const LocationSearchInput = ({ setAddress, error }) => {
   return (
     <>
       <PlacesAutocomplete
-        value={locAddress}
+        value={address}
         onChange={handleChange}
         onSelect={handleSelect}
         searchOptions={{ componentRestrictions: { country: "ca" } }}
@@ -33,8 +33,7 @@ const LocationSearchInput = ({ setAddress, error }) => {
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <>
             <TextField
-              label="Address"
-              variant="outlined"
+              style={{ marginBlock: 10 }}
               fullWidth
               {...getInputProps({
                 placeholder: "Address",

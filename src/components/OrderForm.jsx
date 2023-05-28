@@ -47,6 +47,7 @@ const OrderForm = ({
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
+  const [coord, setCoord] = useState();
   const [plans, setPlans] = useState([]);
   const [menuOptions, setMenuOptions] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState();
@@ -128,12 +129,14 @@ const OrderForm = ({
           setLoading(true);
           if (values.serviceOpt !== "Pickup") {
             values.address = address;
+            values.coord = coord;
           }
           // console.log(cost);
           // values.sellerAccount = sellerAccount;
-          values.price = getTotal(values, "cost");
+          // values.price = getTotal(values, "cost");
+          values.cost = getTotal(values, "cost");
           values.tax = getTotal(values, "tax");
-          values.subTotal = getTotal(values, "");
+          values.totalPrice = getTotal(values, "");
           // const result = await payOrder({
           //   tname: tname,
           //   price: price * 100,
@@ -395,7 +398,12 @@ const OrderForm = ({
             </FormControl>
           )}
           {formik.values.serviceOpt !== "Pickup" && (
-            <LocationSearchInput setAddress={setAddress} error={addErr} />
+            <LocationSearchInput
+              setAddress={setAddress}
+              address={address}
+              error={addErr}
+              setCoord={setCoord}
+            />
           )}
           <Typography variant={"h6"} style={{ marginTop: 50 }}>
             Order Summary

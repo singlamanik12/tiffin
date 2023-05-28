@@ -36,7 +36,7 @@ const OrdersList = () => {
         >
           Pending Orders
         </Typography>
-        {pendingOrders &&
+        {pendingOrders?.length > 0 &&
           pendingOrders.map((order) => (
             <>
               {" "}
@@ -103,7 +103,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.price}
+                        {order.cost}
                       </span>
                     </Typography>
                   </Grid>
@@ -155,11 +155,21 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.subTotal}
+                        {order.totalPrice}
                       </span>
                     </Typography>
                   </Grid>
                 </Grid>
+              </Grid>
+              <Grid item xs={12} style={{ marginBlock: 5 }}>
+                <Typography>
+                  <span>
+                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                      Addition Request
+                    </span>{" "}
+                    - {order?.request}
+                  </span>
+                </Typography>
               </Grid>
               {!!order.selPlan?.days && (
                 <Grid
