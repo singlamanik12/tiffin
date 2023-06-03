@@ -1,3 +1,7 @@
 body {
   margin: 0;
 }
+#imgcarousel {
+  background: linear-gradient(to bottom, black 50%, white 0%);
+  padding-inline: "10px";
+}

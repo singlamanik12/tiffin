@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import SideBar from "./SideBar";
-
+import PersonIcon from "@mui/icons-material/Person";
 import DataContext from "./../api/context";
 
 const EnableColorOnDarkAppBar = () => {
@@ -16,7 +16,7 @@ const EnableColorOnDarkAppBar = () => {
       <AppBar
         position="static"
         elevation={0}
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: "black", color: "white" }}
       >
         <Toolbar style={{ padding: 0 }}>
           <SideBar />
@@ -26,9 +26,10 @@ const EnableColorOnDarkAppBar = () => {
             sx={{ flexGrow: 1 }}
             style={{
               cursor: "pointer",
-              color: "black",
+              color: "white",
               fontSize: "20px",
               marginLeft: 5,
+              textAlign: "center",
             }}
             onClick={() => navigate(`/`)}
           >
@@ -37,29 +38,14 @@ const EnableColorOnDarkAppBar = () => {
           {/* <Button color="inherit" onClick={() => setOpen(true)}>
       Login/SignUp
     </Button> */}
-          {!!user ? (
+          {!!user && (
             <Typography
               variant="caption"
               color="black"
-              style={{ marginRight: 5 }}
+              style={{ marginRight: 5, color: "white" }}
             >
-              {user.FirstName} {user.LastName}
+              <PersonIcon />
             </Typography>
-          ) : (
-            <div
-              style={{
-                color: "black",
-                backgroundColor: "#F5F5F5",
-                padding: 5,
-                borderRadius: 10,
-                marginRight: 5,
-              }}
-              onClick={() => setOpen(true)}
-            >
-              <Typography variant="caption" style={{ fontSize: 12 }}>
-                Sign In
-              </Typography>
-            </div>
           )}
         </Toolbar>
       </AppBar>

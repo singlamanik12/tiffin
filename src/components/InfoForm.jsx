@@ -67,7 +67,13 @@ const InfoForm = ({ PhoneNumber, setOpen, handlePhoneVerification }) => {
             ),
           }}
         /> */}
-          <Button id="sign-in-button" type="submit" fullWidth>
+          <Button
+            id="sign-in-button"
+            variant="contained"
+            type="submit"
+            fullWidth
+            style={{ backgroundColor: "black" }}
+          >
             Finish Signup
           </Button>
         </DialogContent>

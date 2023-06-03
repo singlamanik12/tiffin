@@ -22,7 +22,7 @@ const OrdersList = () => {
     console.log(data);
     setPendingOrders(await getPendingOrders({ CusID: user.CusID }));
     console.log(pendingOrders);
-    // setOrders(await getPastOrders(user.PhoneNumber));
+    console.log(await getPastOrders(user.CusID));
     setLoading(false);
   };
   useEffect(() => {
@@ -54,6 +54,9 @@ const OrdersList = () => {
                   {order.selPlan?.planName && (
                     <Typography>{order.selPlan?.planName}</Typography>
                   )}
+
+                  <Typography>{order.menuOpt.menuType}</Typography>
+
                   {order.rrOpt && (
                     <Typography>
                       {order.rrOpt?.roti > 0 ? order.rrOpt?.roti : "no"} roti &{" "}
@@ -191,7 +194,175 @@ const OrdersList = () => {
               </Grid>
             </>
           ))}
-        {orders && orders.map((order) => <Order order={order} />)}
+        <Typography
+          style={{ marginBottom: 20, fontSize: "20px", fontWeight: "bold" }}
+        >
+          Past Orders
+        </Typography>
+        {orders?.length > 0 &&
+          orders.map(({ previewData }) => (
+            <>
+              {" "}
+              <Grid item xs={12} container>
+                <Grid
+                  item
+                  xs={6}
+                  container
+                  direction="column"
+                  style={{ marginTop: 20 }}
+                >
+                  <Typography style={{ fontWeight: "bold" }}>
+                    {previewData?.tname}
+                  </Typography>
+                  {previewData.selPlan?.planName && (
+                    <Typography>{previewData.selPlan?.planName}</Typography>
+                  )}
+
+                  <Typography>{previewData.menuOpt.menuType}</Typography>
+
+                  {previewData.rrOpt && (
+                    <Typography>
+                      {previewData.rrOpt?.roti > 0
+                        ? previewData.rrOpt?.roti
+                        : "no"}{" "}
+                      roti &{" "}
+                      {previewData.rrOpt?.rice > 0
+                        ? previewData.rrOpt?.rice
+                        : "no"}{" "}
+                      rice
+                    </Typography>
+                  )}
+
+                  {systemExtras?.map((key) => {
+                    return (
+                      parseInt(previewData[key]) > 0 && (
+                        <Typography key={key}>
+                          {previewData[key]}
+                          {" Extra " + _.capitalize(key.substring(1))}
+                        </Typography>
+                      )
+                    );
+                  })}
+
+                  {/* {!!previewData.selPlan?.days && (
+                <Grid style={{ backgroundColor: "whitesmoke" }}>
+                  <Typography>
+                    Ends on
+                    <Typography style={{ fontWeight: "bolder", fontSize: 20 }}>
+                      {moment(previewData?.sDate, "YYYY-MM-DD")
+                        .add(previewData.selPlan?.days, "days")
+                        .format("YYYY-MM-DD")}
+                    </Typography>
+                  </Typography>
+                </Grid>
+              )} */}
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    justifyContent="right"
+                    style={{ marginTop: 40 }}
+                  >
+                    <Typography>
+                      Cost{" "}
+                      <span
+                        style={{
+                          fontWeight: "bolder",
+                          marginLeft: 20,
+                          fontSize: 17,
+                        }}
+                      >
+                        <span style={{ marginRight: 2 }}>C$</span>
+                        {previewData.cost}
+                      </span>
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    justifyContent="right"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Typography>
+                      Tax{" "}
+                      <span
+                        style={{
+                          fontWeight: "bolder",
+                          marginLeft: 20,
+                          fontSize: 17,
+                        }}
+                      >
+                        <span style={{ marginRight: 2 }}>C$</span>
+                        {previewData.tax}
+                      </span>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} container justifyContent="right">
+                    <div
+                      style={{
+                        width: "112px",
+                        height: "7px",
+                        position: "relative",
+                        borderBottom: "1px solid #000000",
+                      }}
+                    ></div>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    container
+                    justifyContent="right"
+                    style={{ marginTop: 10 }}
+                  >
+                    <Typography>
+                      Total{" "}
+                      <span
+                        style={{
+                          fontWeight: "bolder",
+                          marginLeft: 20,
+                          fontSize: 25,
+                        }}
+                      >
+                        <span style={{ marginRight: 2 }}>C$</span>
+                        {previewData.totalPrice}
+                      </span>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} style={{ marginBlock: 5 }}>
+                <Typography>
+                  <span>
+                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                      Addition Request
+                    </span>{" "}
+                    - {previewData?.request}
+                  </span>
+                </Typography>
+              </Grid>
+              {!!previewData.selPlan?.days && (
+                <Grid
+                  style={{
+                    backgroundColor: "whitesmoke",
+                    padding: 10,
+                    borderRadius: 20,
+                  }}
+                >
+                  <Typography>
+                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                      {previewData.sDate + " - " + previewData.eDate}
+                    </span>
+                  </Typography>
+                </Grid>
+              )}
+              <Grid item xs={12} style={{ marginBlock: 5 }}>
+                <Divider style={{ color: "black", height: "1px" }} />
+              </Grid>
+            </>
+          ))}
       </Grid>
     </Layout>
   );

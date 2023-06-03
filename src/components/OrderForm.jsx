@@ -598,7 +598,7 @@ const OrderForm = ({
               type="submit"
               disabled={sellerAccount === undefined}
               fullWidth
-              style={{ marginTop: 20 }}
+              style={{ marginTop: 20, backgroundColor: "black" }}
             >
               Order
             </Button>
