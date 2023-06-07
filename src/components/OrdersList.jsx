@@ -14,15 +14,11 @@ const OrdersList = () => {
   const [systemExtras, setSystemExtras] = useState([]);
   const getOrders = async () => {
     setLoading(true);
-    console.log(user);
     const { data } = await axios.get(
       "https://singlamanik12.github.io/tiffin-conf/extras.json"
     );
     setSystemExtras(Object.keys(data));
-    console.log(data);
     setPendingOrders(await getPendingOrders({ CusID: user.CusID }));
-    console.log(pendingOrders);
-    console.log(await getPastOrders(user.CusID));
     setLoading(false);
   };
   useEffect(() => {

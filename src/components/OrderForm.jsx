@@ -123,7 +123,6 @@ const OrderForm = ({
     enableReinitialize: true,
     validationSchema: OrderSchema,
     onSubmit: async (values) => {
-      console.log(values, user);
       if (values.serviceOpt === "Pickup" || address) {
         if (user) {
           setLoading(true);
@@ -319,7 +318,6 @@ const OrderForm = ({
                     }
                     onChange={(e) => {
                       if (e.target.value >= 0 && e.target.value <= 10) {
-                        console.log(e.target.value);
                         formik.setFieldValue(`x${option}`, e.target.value);
                       }
                     }}

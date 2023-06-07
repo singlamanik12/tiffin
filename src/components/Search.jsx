@@ -31,14 +31,12 @@ const Search = () => {
     );
     const { data } = await getMenuByCity(res);
     setCity(res);
-    console.log("Manik", data);
     setServices(data);
     setLoading(false);
   };
   const handleChange = (event) => {
     window.location.href = `/services/${event.target.value}`;
   };
-  console.log("Manik", services);
   return (
     <Layout style={{ paddingTop: "30px" }}>
       <Grid container style={{ paddingInline: 10 }}>
