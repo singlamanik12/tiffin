@@ -21,7 +21,6 @@ import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-
 const OrderSchema = Yup.object().shape({
   menuOpt: Yup.object().shape({}).required("Required"),
   rrOpt: Yup.object().shape({}).required("Required"),
@@ -169,13 +168,13 @@ const OrderForm = ({
     <>
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
         <Grid item container direction="row" style={{ padding: "8px" }}>
+          <Snackbar
+            open={snack}
+            autoHideDuration={2000}
+            onClose={() => setSnack(false)}
+            message="Copied to clipboard"
+          />
           <FormControl fullWidth style={{ marginTop: 10, marginBottom: 10 }}>
-            <Snackbar
-              open={snack}
-              autoHideDuration={2000}
-              onClose={() => setSnack(false)}
-              message="Copied to clipboard"
-            />
             <InputLabel id={"prodType"}>Select Type</InputLabel>
             <Select
               id="prodType"
@@ -354,7 +353,7 @@ const OrderForm = ({
                   );
                 }}
                 error={formik.touched.sDate && Boolean(formik.errors.sDate)}
-                helperText={formik.touched.sDate && formik.errors.sDate}
+                // helperText={formik.touched.sDate && formik.errors.sDate}
               />
             </Grid>
           )}
@@ -412,6 +411,9 @@ const OrderForm = ({
               direction="column"
               style={{ marginTop: 40 }}
             >
+              {formik.values.selPlan?.planName && (
+                <Typography>{formik.values.prodType?.prodName}</Typography>
+              )}
               {formik.values.selPlan?.planName && (
                 <Typography>{formik.values.selPlan?.planName}</Typography>
               )}
@@ -577,6 +579,7 @@ const OrderForm = ({
               and enter the confirmation number below
             </Typography>
           </Grid>
+
           <TextField
             fullWidth
             id="confNum"
@@ -596,6 +599,43 @@ const OrderForm = ({
               type="submit"
               disabled={sellerAccount === undefined}
               fullWidth
+              onClick={() => {
+                if (formik.values.prodType === "") {
+                  document.getElementById("prodType").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+                if (formik.values.selPlan === "") {
+                  document.getElementById("selPlan").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+                if (formik.values.menuOpt === "") {
+                  document.getElementById("menuOpt").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+                if (formik.values.rrOpt === "") {
+                  document.getElementById("rrOpt").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+                if (formik.values.sDate === "") {
+                  document.getElementById("sDate").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+              }}
               style={{ marginTop: 20, backgroundColor: "black" }}
             >
               Order

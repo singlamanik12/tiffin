@@ -48,6 +48,9 @@ const OrdersList = () => {
                     {order?.tname}
                   </Typography>
                   {order.selPlan?.planName && (
+                    <Typography>{order.prodType?.prodName}</Typography>
+                  )}
+                  {order.selPlan?.planName && (
                     <Typography>{order.selPlan?.planName}</Typography>
                   )}
 
@@ -161,14 +164,16 @@ const OrdersList = () => {
                 </Grid>
               </Grid>
               <Grid item xs={12} style={{ marginBlock: 5 }}>
-                <Typography>
-                  <span>
-                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      Addition Request
-                    </span>{" "}
-                    - {order?.request}
-                  </span>
-                </Typography>
+                {order?.request && (
+                  <Typography>
+                    <span>
+                      <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                        Additional Request
+                      </span>{" "}
+                      - {order?.request}
+                    </span>
+                  </Typography>
+                )}
               </Grid>
               {!!order.selPlan?.days && (
                 <Grid
@@ -190,13 +195,17 @@ const OrdersList = () => {
               </Grid>
             </>
           ))}
-        <Typography
-          style={{ marginBottom: 20, fontSize: "20px", fontWeight: "bold" }}
-        >
-          Past Orders
-        </Typography>
+        {orders?.length > 0 && (
+          <Grid item xs={12} style={{ marginBlock: 5 }}>
+            <Typography
+              style={{ marginBlock: 20, fontSize: "20px", fontWeight: "bold" }}
+            >
+              Past Orders
+            </Typography>
+          </Grid>
+        )}
         {orders?.length > 0 &&
-          orders.map(({ previewData }) => (
+          orders.map(({ sDate, eDate, previewData }) => (
             <>
               {" "}
               <Grid item xs={12} container>
@@ -349,7 +358,7 @@ const OrdersList = () => {
                 >
                   <Typography>
                     <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      {previewData.sDate + " - " + previewData.eDate}
+                      {sDate + " - " + eDate}
                     </span>
                   </Typography>
                 </Grid>
