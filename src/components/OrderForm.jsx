@@ -328,7 +328,7 @@ const OrderForm = ({
                 </Grid>
               ))}
           </Grid>
-          {formik.values.selPlan?.days && (
+          {formik.values.selPlan?.days !== undefined && (
             <Grid item xs={12} container alignItems="center">
               {/* <Typography style={{ marginRight: 10 }}>Start Date</Typography> */}
               <TextField
@@ -529,7 +529,7 @@ const OrderForm = ({
               </Grid>
             </Grid>
           </Grid>
-          {!!formik.values.selPlan?.days && (
+          {formik.values?.eDate && (
             <Grid
               style={{
                 backgroundColor: "whitesmoke",

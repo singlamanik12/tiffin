@@ -175,21 +175,19 @@ const OrdersList = () => {
                   </Typography>
                 )}
               </Grid>
-              {!!order.selPlan?.days && (
-                <Grid
-                  style={{
-                    backgroundColor: "whitesmoke",
-                    padding: 10,
-                    borderRadius: 20,
-                  }}
-                >
-                  <Typography>
-                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      {order.sDate + " - " + order.eDate}
-                    </span>
-                  </Typography>
-                </Grid>
-              )}
+              <Grid
+                style={{
+                  backgroundColor: "whitesmoke",
+                  padding: 10,
+                  borderRadius: 20,
+                }}
+              >
+                <Typography>
+                  <span style={{ fontWeight: "bolder", fontSize: 20 }}>
+                    {order.sDate + " - " + order.eDate}
+                  </span>
+                </Typography>
+              </Grid>
               <Grid item xs={12} style={{ marginBlock: 5 }}>
                 <Divider style={{ color: "black", height: "1px" }} />
               </Grid>
