@@ -215,6 +215,7 @@ const OrderForm = ({
                 label={"Select Plan"}
                 onChange={(e) => {
                   setExtrasOptions([]);
+                  formik.setFieldValue("rrOpt", "");
                   formik.setFieldValue("menuOpt", "");
                   formik.setFieldValue("price", "");
                   formik.setFieldValue("selPlan", e.target.value);
@@ -246,6 +247,7 @@ const OrderForm = ({
                 value={formik.values.menuOpt}
                 label={"Select Plan"}
                 onChange={(e) => {
+                  formik.setFieldValue("rrOpt", "");
                   formik.setFieldValue("menuOpt", e.target.value);
                   formik.setFieldValue("price", e.target.value?.price);
                   setRrOptions(e.target.value?.rrOpt);
