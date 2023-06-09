@@ -1,16 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import { TextField, InputAdornment } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import DataContext from "../api/context";
 import FirebaseUI from "./FirebaseUI";
 import jwt_decode from "jwt-decode";
-import firebase from "firebase/compat/app";
 import InfoForm from "./InfoForm";
-import { login, signup } from "../api/customer";
+import { login } from "../api/customer";
 const LoginForm = () => {
   const { open, setOpen, user, setUser } = useContext(DataContext);
   const [PhoneNumber, setPhoneNumber] = useState();

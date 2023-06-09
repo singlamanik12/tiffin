@@ -7,7 +7,7 @@ const ServicesList = ({ services = [] }) => {
     <>
       <Grid container>
         {services.map((service) => (
-          <ServiceOutline service={service} />
+          <ServiceOutline key={service} service={service} />
         ))}
       </Grid>
     </>

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppBar, Button } from "@mui/material";
+import { AppBar } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";

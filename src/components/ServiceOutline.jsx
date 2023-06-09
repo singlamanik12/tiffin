@@ -2,9 +2,8 @@ import React from "react";
 import { Typography, Grid, Divider } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
-import ImageCarousel from "./Carousel";
 const ServiceOutline = ({ service }) => {
-  const { tname, vegPrice, nvegPrice, overview, _id } = service;
+  const { tname, overview, _id } = service;
   let navigate = useNavigate();
   const text = overview;
 

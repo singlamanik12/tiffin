@@ -13,7 +13,7 @@ const getMenuBySelId = async (values) => {
 
 const getMenuByCity = async (values) => {
   const result = await axios.get(
-    api + "/menu/fetchByCity/" + values.toString()
+    api + "/menu/fetchByCity/" + values?.toString()
   );
   return result;
 };

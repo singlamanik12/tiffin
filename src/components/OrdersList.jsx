@@ -3,10 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import DataContext from "../api/context";
 import { getPastOrders, getPendingOrders } from "../api/order";
 import Layout from "../shared/Layout";
-import Order from "./Order";
 import axios from "axios";
 import _ from "lodash";
-import moment from "moment";
 const OrdersList = () => {
   const { user, setLoading } = useContext(DataContext);
   const [orders, setOrders] = useState([]);
@@ -19,6 +17,7 @@ const OrdersList = () => {
     );
     setSystemExtras(Object.keys(data));
     setPendingOrders(await getPendingOrders({ CusID: user.CusID }));
+    setOrders(await getPastOrders(user.CusID));
     setLoading(false);
   };
   useEffect(() => {
@@ -27,11 +26,13 @@ const OrdersList = () => {
   return (
     <Layout>
       <Grid item container direction="row" style={{ padding: "8px" }}>
-        <Typography
-          style={{ marginBottom: 20, fontSize: "20px", fontWeight: "bold" }}
-        >
-          Pending Orders
-        </Typography>
+        {pendingOrders.length > 0 && (
+          <Typography
+            style={{ marginBottom: 20, fontSize: "20px", fontWeight: "bold" }}
+          >
+            Pending Orders
+          </Typography>
+        )}
         {pendingOrders?.length > 0 &&
           pendingOrders.map((order) => (
             <>
@@ -338,12 +339,7 @@ const OrdersList = () => {
               </Grid>
               <Grid item xs={12} style={{ marginBlock: 5 }}>
                 <Typography>
-                  <span>
-                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      Addition Request
-                    </span>{" "}
-                    - {previewData?.request}
-                  </span>
+                  <span>{previewData?.request}</span>
                 </Typography>
               </Grid>
               {!!previewData.selPlan?.days && (

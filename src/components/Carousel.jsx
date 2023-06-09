@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import { IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -22,7 +22,7 @@ export default function ImageCarousel({ pics }) {
       }
     >
       {pics.map((pic, index) => (
-        <Carousel.Item variant="black">
+        <Carousel.Item variant="black" key="index">
           <img
             className="d-block w-100"
             src={pic.url}

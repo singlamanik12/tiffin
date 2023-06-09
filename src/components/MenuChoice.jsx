@@ -1,16 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Divider, Grid, Typography, Button, IconButton } from "@mui/material";
-import OptionTemplate from "./OptionTemplate";
-import OptionSelect from "./OptionSelect";
+import { Grid } from "@mui/material";
 import Layout from "../shared/Layout";
 import DataContext from "../api/context";
 import Loading from "./../shared/Loading";
-import MdPhone from "@mui/icons-material/Phone";
-import Chip from "@mui/material/Chip";
 import { getSellerById } from "../api/menu";
 import OrderForm from "./OrderForm";
-import ShareIcon from "@mui/icons-material/Share";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import ImageCarousel from "./Carousel";
 import orderNow from "./../resources/ordernow.gif";
 export default function MenuChoice({ values }) {

@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import { Grid } from "@mui/material";
 import AppBar from "./components/AppBar";
 import Loading from "./shared/Loading";
-import Lorattf from "./resources/Lora-Regular.ttf";
 import Merriweather from "./resources/Merriweather-Regular.ttf";
 
 const App = () => {

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import OptionSelect from "./OptionSelect";
 import {
   Button,
   Grid,
@@ -16,7 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import DataContext from "../api/context";
 import axios from "axios";
-import { payOrder, payOrderAccount, saveOrder } from "../api/order";
+import { payOrderAccount, saveOrder } from "../api/order";
 import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
@@ -49,14 +48,11 @@ const OrderForm = ({
   const [coord, setCoord] = useState();
   const [plans, setPlans] = useState([]);
   const [menuOptions, setMenuOptions] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState();
   const [rrOptions, setRrOptions] = useState([]);
-  const [rsOptions, setRsOptions] = useState([]);
+
   const [extras, setExtras] = useState({});
   const [extrasOptions, setExtrasOptions] = useState([]);
   const [systemExtras, setSystemExtras] = useState({});
-  const [cost, setCost] = useState();
-  const [subTotal, setSubTotal] = useState();
   const [snack, setSnack] = useState(false);
   const [initial, setInitial] = useState({
     prodType: "",
