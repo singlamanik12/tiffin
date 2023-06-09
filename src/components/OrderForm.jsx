@@ -394,6 +394,7 @@ const OrderForm = ({
               </Select>
             </FormControl>
           )}
+          <input type="hidden" id="addr" />
           {formik.values.serviceOpt !== "Pickup" && (
             <LocationSearchInput
               setAddress={setAddress}
@@ -632,6 +633,13 @@ const OrderForm = ({
                 }
                 if (formik.values.sDate === "") {
                   document.getElementById("sDate").scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                  });
+                }
+                if (formik.values.serviceOpt === "Delivery" && !address) {
+                  document.getElementById("serviceOpt").scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",

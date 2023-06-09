@@ -26,6 +26,7 @@ const LocationSearchInput = ({ setAddress, error, setCoord, address }) => {
     <>
       <PlacesAutocomplete
         value={address}
+        id="address"
         onChange={handleChange}
         onSelect={handleSelect}
         searchOptions={{ componentRestrictions: { country: "ca" } }}
