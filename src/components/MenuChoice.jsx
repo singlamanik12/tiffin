@@ -38,6 +38,7 @@ export default function MenuChoice({ values }) {
     pics,
     isVerified,
     phoneNumber,
+    notifyEmail,
     interacEmail,
   } = values;
   const getPhoneNumber = async () => {
@@ -109,6 +110,7 @@ export default function MenuChoice({ values }) {
           vegPrice={vegPrice}
           nvegPrice={nvegPrice}
           interacEmail={interacEmail}
+          notifyEmail={notifyEmail}
         />
       </Grid>
     </Layout>

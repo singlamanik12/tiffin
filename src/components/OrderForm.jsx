@@ -41,6 +41,7 @@ const OrderForm = ({
   products,
   serviceTypes,
   interacEmail,
+  notifyEmail,
   isVerified,
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
@@ -131,6 +132,7 @@ const OrderForm = ({
           values.cost = getTotal(values, "cost");
           values.tax = getTotal(values, "tax");
           values.totalPrice = getTotal(values, "");
+          values.notifyEmail = notifyEmail;
           // const result = await payOrder({
           //   tname: tname,
           //   price: price * 100,
