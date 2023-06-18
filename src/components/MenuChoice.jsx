@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import Layout from "../shared/Layout";
 import DataContext from "../api/context";
 import Loading from "./../shared/Loading";
@@ -37,6 +37,7 @@ export default function MenuChoice({ values }) {
     city,
     pics,
     isVerified,
+    additional_info,
     phoneNumber,
     notifyEmail,
     interacEmail,
@@ -85,6 +86,15 @@ export default function MenuChoice({ values }) {
         <div id="imgcarousel">
           <ImageCarousel pics={pics} />
         </div>
+        <Grid item xs={12} style={{ padding: "8px" }}>
+          <Typography
+            variant="h5"
+            style={{ fontWeight: "bold", marginBlock: 10 }}
+          >
+            Additional Information
+          </Typography>
+          <Typography>{additional_info}</Typography>
+        </Grid>
         <Grid item xs={12} container>
           <img
             src={orderNow}
