@@ -26,13 +26,13 @@ const OrdersList = () => {
   return (
     <Layout>
       <Grid item container direction="row" style={{ padding: "8px" }}>
-        {pendingOrders.length > 0 && (
+        {/* {pendingOrders.length > 0 && (
           <Typography
             style={{ marginBottom: 20, fontSize: "20px", fontWeight: "bold" }}
           >
             Pending Orders
           </Typography>
-        )}
+        )} */}
         {pendingOrders?.length > 0 &&
           pendingOrders.map((order) => (
             <>
@@ -194,7 +194,7 @@ const OrdersList = () => {
               </Grid>
             </>
           ))}
-        {orders?.length > 0 && (
+        {/* {orders?.length > 0 && (
           <Grid item xs={12} style={{ marginBlock: 5 }}>
             <Typography
               style={{ marginBlock: 20, fontSize: "20px", fontWeight: "bold" }}
@@ -202,7 +202,7 @@ const OrdersList = () => {
               Past Orders
             </Typography>
           </Grid>
-        )}
+        )} */}
         {orders?.length > 0 &&
           orders.map(({ sDate, eDate, previewData }) => (
             <>
