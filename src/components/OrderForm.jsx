@@ -9,6 +9,7 @@ import {
   Typography,
   FormControl,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import LocationSearchInput from "./LocationSearchInput";
 import { useFormik } from "formik";
@@ -42,7 +43,9 @@ const OrderForm = ({
   serviceTypes,
   interacEmail,
   notifyEmail,
+  delArea,
   isVerified,
+  delAreaNote,
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
@@ -164,6 +167,10 @@ const OrderForm = ({
   const [addErr, setAddErr] = useState(false);
   return (
     <>
+      <Alert severity="info" style={{ width: "100%" }}>
+        If you find anything wrong on this page, please contact{" "}
+        <strong>{tname}</strong>
+      </Alert>
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
         <Grid item container direction="row" style={{ padding: "8px" }}>
           <Snackbar
@@ -395,13 +402,19 @@ const OrderForm = ({
           <input type="hidden" id="addr" />
           {formik.values.serviceOpt !== "Pickup" && (
             <LocationSearchInput
+              delArea={delArea}
               setAddress={setAddress}
               address={address}
               error={addErr}
+              delAreaNote={delAreaNote}
               setCoord={setCoord}
+              tname={tname}
             />
           )}
-          <Typography variant={"h6"} style={{ marginTop: 50 }}>
+          <Typography
+            variant={"h6"}
+            style={{ marginTop: 50, fontWeight: "bold" }}
+          >
             Order Summary
           </Typography>
           <Grid item xs={12} container>

@@ -4,26 +4,103 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-places-autocomplete";
 import TextField from "@mui/material/TextField";
-
-const LocationSearchInput = ({ setAddress, error, setCoord, address }) => {
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useTheme } from "@mui/material/styles";
+import { Alert, AlertTitle, Typography } from "@mui/material";
+const LocationSearchInput = ({
+  delArea,
+  setAddress,
+  error,
+  setCoord,
+  address,
+  delAreaNote,
+  tname,
+}) => {
   const [locAddress, setLocAddress] = useState(address);
+  const [open, setOpen] = React.useState(false);
   const [touched, setTouched] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleChange = (address) => {
     setAddress(address);
     setTouched(true);
   };
 
-  const handleSelect = (address) => {
-    geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => setCoord(latLng))
-      .catch((error) => console.error("Error", error));
-    setLocAddress(address);
-    setAddress(address);
+  const handleSelect = async (address) => {
+    try {
+      let setFlag = true;
+      await geocodeByAddress(address)
+        .then((results) => {
+          getLatLng(results[0]);
+          const address_array = results[0].address_components;
+          if (
+            address_array[address_array.length - 1].types[0] !==
+              "postal_code" ||
+            !delArea?.includes(
+              address_array[address_array.length - 1].long_name.split(" ")[0]
+            )
+          ) {
+            setFlag = false;
+            handleClickOpen();
+            throw new Error("Out of bounds");
+          }
+        })
+        .then((latLng) => {
+          if (setFlag) {
+            setCoord(latLng);
+          }
+        })
+        .catch((error) => console.error("Error", error));
+      if (setFlag) {
+        setAddress(address);
+      } else {
+        setAddress("");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <>
+      <div>
+        <Dialog
+          fullScreen={fullScreen}
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogContent>
+            <DialogContentText>
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                {delAreaNote}
+              </Alert>
+              {/* <br />
+              <Typography variant="caption">
+                If you think that this error is wrong, please contact{" "}
+                <strong>{tname}</strong>
+              </Typography> */}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Ok</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
       <PlacesAutocomplete
         value={address}
         id="address"

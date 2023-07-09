@@ -41,6 +41,8 @@ export default function MenuChoice({ values }) {
     phoneNumber,
     notifyEmail,
     interacEmail,
+    delArea,
+    delAreaNote,
   } = values;
   const getPhoneNumber = async () => {
     const { data } = await getSellerById(SelID);
@@ -86,7 +88,7 @@ export default function MenuChoice({ values }) {
         <div id="imgcarousel">
           <ImageCarousel pics={pics} />
         </div>
-        <Grid item xs={12} style={{ padding: "8px" }}>
+        <Grid item xs={12} style={{ padding: "8px", marginTop: 20 }}>
           <Typography
             variant="h5"
             style={{ fontWeight: "bold", marginBlock: 10 }}
@@ -95,12 +97,25 @@ export default function MenuChoice({ values }) {
           </Typography>
           <Typography>{additional_info}</Typography>
         </Grid>
-        <Grid item xs={12} container>
-          <img
-            src={orderNow}
-            alt="orderNow"
-            style={{ width: "50%", height: "auto", marginLeft: 10 }}
-          />
+        <Grid item xs={12} style={{ padding: "8px" }}>
+          <Typography
+            variant="h5"
+            style={{ fontWeight: "bold", marginBlock: 10 }}
+          >
+            Delivery Note
+          </Typography>
+          <Typography>{delAreaNote}</Typography>
+        </Grid>
+        <Grid item xs={12} style={{ marginBlock: 10 }}>
+          <hr />
+        </Grid>
+        <Grid item xs={12} style={{ padding: "8px" }}>
+          <Typography
+            variant="h4"
+            style={{ fontWeight: "bold", marginBlock: 20 }}
+          >
+            Order Now
+          </Typography>
         </Grid>
         <OrderForm
           SelID={SelID}
@@ -108,6 +123,7 @@ export default function MenuChoice({ values }) {
           menuOptions={menuOptions}
           rr={rr}
           rs={rs}
+          delArea={delArea}
           products={products}
           logo={logo}
           gallery={gallery}
@@ -121,6 +137,7 @@ export default function MenuChoice({ values }) {
           nvegPrice={nvegPrice}
           interacEmail={interacEmail}
           notifyEmail={notifyEmail}
+          delAreaNote={delAreaNote}
         />
       </Grid>
     </Layout>
