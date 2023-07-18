@@ -41,32 +41,18 @@ const LocationSearchInput = ({
 
   const handleSelect = async (address) => {
     try {
-      let setFlag = true;
-      await geocodeByAddress(address)
-        .then((results) => {
-          getLatLng(results[0]);
-          const address_array = results[0].address_components;
-          if (
-            address_array[address_array.length - 1].types[0] !==
-              "postal_code" ||
-            !delArea?.includes(
-              address_array[address_array.length - 1].long_name.split(" ")[0]
-            )
-          ) {
-            setFlag = false;
-            handleClickOpen();
-            throw new Error("Out of bounds");
-          }
-        })
-        .then((latLng) => {
-          if (setFlag) {
-            setCoord(latLng);
-          }
-        })
-        .catch((error) => console.error("Error", error));
-      if (setFlag) {
+      const results = await geocodeByAddress(address);
+      const address_array = results[0].address_components;
+      if (
+        address_array[address_array.length - 1].types[0] === "postal_code" &&
+        delArea?.includes(
+          address_array[address_array.length - 1].long_name.split(" ")[0]
+        )
+      ) {
         setAddress(address);
+        setCoord(await getLatLng(results[0]));
       } else {
+        handleClickOpen();
         setAddress("");
       }
     } catch (err) {
