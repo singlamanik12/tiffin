@@ -1,12 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Grid, Typography } from "@mui/material";
+import {
+  Chip,
+  Divider,
+  Grid,
+  IconButton,
+  Link,
+  Typography,
+} from "@mui/material";
 import Layout from "../shared/Layout";
 import DataContext from "../api/context";
 import Loading from "./../shared/Loading";
 import { getSellerById } from "../api/menu";
 import OrderForm from "./OrderForm";
+import StarRateIcon from "@mui/icons-material/StarRate";
 import ImageCarousel from "./Carousel";
 import orderNow from "./../resources/ordernow.gif";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import IosShareIcon from "@mui/icons-material/IosShare";
 export default function MenuChoice({ values }) {
   const { setOpen } = useContext(DataContext);
   const [done, setDone] = useState(false);
@@ -19,6 +30,7 @@ export default function MenuChoice({ values }) {
   }, []);
 
   const {
+    _id,
     SelID,
     tname,
     overview,
@@ -31,6 +43,7 @@ export default function MenuChoice({ values }) {
     products,
     address,
     logo,
+    coord,
     banner,
     gallery,
     serviceTypes,
@@ -70,6 +83,94 @@ export default function MenuChoice({ values }) {
         <Grid
           item
           xs={12}
+          container
+          style={{ marginTop: 10, paddingInline: 20 }}
+          alignItems="center"
+        >
+          {logo !== "" && (
+            <img
+              src={logo}
+              alt="orderNow"
+              style={{
+                width: 40,
+                height: 40,
+              }}
+            />
+          )}
+          <Typography
+            style={{ fontSize: 35, fontWeight: "bolder", marginLeft: 15 }}
+          >
+            Desi Tadka
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          style={{ paddingInline: 20 }}
+          justifyContent="right"
+          container
+        >
+          <IconButton
+            onClick={() => window.open("tel:+1" + phoneNumber, "_self")}
+          >
+            <PhoneIcon style={{ color: "#4169E1" }} />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              window.location.href = `https://www.google.com/maps/dir/?api=1&destination=${coord.lat},${coord.lng}`;
+            }}
+          >
+            <LocationOnIcon style={{ color: "#00A36C" }} />
+          </IconButton>
+          <IconButton
+            onClick={async () => {
+              await navigator.share({
+                title: "DT Meals",
+                text: `Book your tiffin from ${tname} on DT Meals.`,
+                url: `https://dtmeals.com/menu/${_id}`,
+              });
+            }}
+          >
+            <IosShareIcon />
+          </IconButton>
+        </Grid>
+        <Grid item xs={12} direction="row" style={{ marginBlock: 20 }}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12} style={{ marginBlock: 20 }}>
+          <ImageCarousel pics={pics} />
+        </Grid>
+        <Grid item xs={12} direction="row">
+          <Divider>
+            <Chip
+              label="Meal Plans"
+              style={{ fontSize: 23, fontWeight: "bolder" }}
+            />
+          </Divider>
+          {products?.map((product) => (
+            <Grid
+              item
+              xs={12}
+              key={product.prodName}
+              container
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography
+                fontSize={25}
+                fontWeight="bolder"
+                style={{ marginTop: 20 }}
+              >
+                {product.prodName}
+              </Typography>
+              <Typography>{product.description}</Typography>
+            </Grid>
+          ))}
+        </Grid>
+        {/* <Grid
+          item
+          xs={12}
           style={{ backgroundColor: "black" }}
           container
           justifyContent="center"
@@ -84,38 +185,54 @@ export default function MenuChoice({ values }) {
               marginBlock: 10,
             }}
           />
-        </Grid>
-        <div id="imgcarousel">
+        </Grid> */}
+        {/* <div id="imgcarousel">
           <ImageCarousel pics={pics} />
-        </div>
-        <Grid item xs={12} style={{ padding: "8px", marginTop: 20 }}>
-          <Typography
-            variant="h5"
-            style={{ fontWeight: "bold", marginBlock: 10 }}
-          >
-            Additional Information
-          </Typography>
-          <Typography>{additional_info}</Typography>
+        </div> */}
+        <Grid item xs={12} direction="row" style={{ marginTop: 20 }}>
+          <Divider style={{ marginBlock: 20 }}>
+            <Chip
+              label="Additional Information"
+              style={{ fontSize: 23, fontWeight: "bolder" }}
+            />
+          </Divider>
+          {additional_info?.map((info) => (
+            <Grid
+              item
+              xs={12}
+              container
+              alignItems="center"
+              justifyContent="center"
+              key={info}
+            >
+              <Typography style={{ marginTop: 10 }}>{info}</Typography>
+            </Grid>
+          ))}
         </Grid>
-        <Grid item xs={12} style={{ padding: "8px" }}>
-          <Typography
-            variant="h5"
-            style={{ fontWeight: "bold", marginBlock: 10 }}
+        <Grid item xs={12} direction="row" style={{ marginTop: 20 }}>
+          <Divider style={{ marginBlock: 20 }}>
+            <Chip
+              label="Delivery Information"
+              style={{ fontSize: 23, fontWeight: "bolder" }}
+            />
+          </Divider>
+          <Grid
+            item
+            xs={12}
+            container
+            alignItems="center"
+            justifyContent="center"
           >
-            Delivery Note
-          </Typography>
-          <Typography>{delAreaNote}</Typography>
+            <Typography>{delAreaNote}</Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={12} style={{ marginBlock: 10 }}>
-          <hr />
-        </Grid>
-        <Grid item xs={12} style={{ padding: "8px" }}>
-          <Typography
-            variant="h4"
-            style={{ fontWeight: "bold", marginBlock: 20 }}
-          >
-            Order Now
-          </Typography>
+        <Grid item xs={12} style={{ padding: "8px", marginTop: 30 }}>
+          <Divider style={{ marginBlock: 20 }}>
+            <Chip
+              label="Order Now"
+              style={{ fontSize: 23, fontWeight: "bolder" }}
+            />
+          </Divider>
         </Grid>
         <OrderForm
           SelID={SelID}

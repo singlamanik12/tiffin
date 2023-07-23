@@ -79,7 +79,7 @@ const Footer = () => {
           }}
         >
           <CopyrightIcon />
-          2022 DT Meals Technologies Inc.
+          2023 DT Meals Technologies Inc.
         </Typography>
       </Grid>
       <Grid

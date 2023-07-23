@@ -16,7 +16,7 @@ const EnableColorOnDarkAppBar = () => {
       <AppBar
         position="static"
         elevation={0}
-        style={{ backgroundColor: "black", color: "white" }}
+        style={{ backgroundColor: "white", color: "black" }}
       >
         <Toolbar style={{ padding: 0 }}>
           <SideBar />
@@ -26,7 +26,6 @@ const EnableColorOnDarkAppBar = () => {
             sx={{ flexGrow: 1 }}
             style={{
               cursor: "pointer",
-              color: "white",
               fontSize: "20px",
               marginLeft: 5,
               textAlign: "center",
@@ -42,7 +41,7 @@ const EnableColorOnDarkAppBar = () => {
             <Typography
               variant="caption"
               color="black"
-              style={{ marginRight: 5, color: "white" }}
+              style={{ marginRight: 5 }}
             >
               <PersonIcon />
             </Typography>
