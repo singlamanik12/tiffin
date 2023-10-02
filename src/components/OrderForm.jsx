@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import DataContext from "../api/context";
 import axios from "axios";
-import { payOrderAccount, saveOrder } from "../api/order";
+import { payOrder, payOrderAccount, saveOrder } from "../api/order";
 import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
@@ -122,36 +122,29 @@ const OrderForm = ({
     enableReinitialize: true,
     validationSchema: OrderSchema,
     onSubmit: async (values) => {
-      if (values.serviceOpt === "Pickup" || address) {
+      if (
+        values.serviceOpt === "Pickup" ||
+        (address && address === selectedAdd)
+      ) {
         if (user) {
           setLoading(true);
           if (values.serviceOpt !== "Pickup") {
             values.address = address;
             values.coord = coord;
           }
-          // console.log(cost);
-          // values.sellerAccount = sellerAccount;
-          // values.price = getTotal(values, "cost");
           values.cost = getTotal(values, "cost");
           values.tax = getTotal(values, "tax");
           values.totalPrice = getTotal(values, "");
           values.notifyEmail = notifyEmail;
-          // const result = await payOrder({
-          //   tname: tname,
-          //   price: price * 100,
-          //   sellerAccount: sellerAccount,
-          // });
-          // values.checkout = result.data;
-          // values.ch_id = result.data.id;
           values.SelID = SelID;
           values.tname = tname;
-          // let extrasOpt = [];
-          // extrasOptions?.map((option) => {
-          //      extrasOpt.push({option:  values[`x${option}`]})
-          // })
-          // values.paid = price - 0.05 * price;
           let temp = Object.assign({}, values, user);
-          // console.log(values.subTotal);
+          // const result = await payOrder({
+          //   tname: tname,
+          //   price: values.totalPrice * 100,
+          //   sellerAccount: "acct_1LJjvEQq63yTe9HR",
+          // });
+          // console.log(result);
           const data = await saveOrder(temp);
           setLoading(false);
           window.location.href = "/orders";
@@ -164,6 +157,7 @@ const OrderForm = ({
     },
   });
   const [address, setAddress] = useState("");
+  const [selectedAdd, setSelectedAdd] = useState();
   const [addErr, setAddErr] = useState(false);
   return (
     <>
@@ -343,21 +337,46 @@ const OrderForm = ({
                 id="sDate"
                 fullWidth
                 name="sDate"
-                type="date"
+                type="text"
                 label="Start Date"
                 variant="outlined"
+                placeholder="YYYY-MM-DD"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 value={formik.values?.sDate}
                 onChange={(e) => {
-                  formik.setFieldValue("sDate", e.target.value);
-                  formik.setFieldValue(
-                    "eDate",
-                    moment(e.target.value, "YYYY-MM-DD")
-                      .add(formik.values.selPlan?.days, "days")
-                      .format("YYYY-MM-DD")
-                  );
+                  const inputDate = e.target.value;
+
+                  // Remove non-numeric characters
+                  const numericDate = inputDate.replace(/\D/g, "");
+
+                  // Format the date as the user types (YYYY-MM-DD)
+                  if (numericDate.length <= 8) {
+                    const formattedDate =
+                      numericDate.slice(0, 4) +
+                      (numericDate[4] ? "-" + numericDate.slice(4, 6) : "") +
+                      (numericDate[6] ? "-" + numericDate.slice(6, 8) : "");
+                    formik.setFieldValue("sDate", formattedDate);
+                    formik.setFieldValue(
+                      "eDate",
+                      moment(formattedDate, "YYYY-MM-DD")
+                        .add(formik.values.selPlan?.days, "days")
+                        .format("YYYY-MM-DD")
+                    );
+                  }
+                }}
+                onBlur={(e) => {
+                  if (
+                    formik.values.sDate?.length !== 10 ||
+                    !moment(formik.values.sDate, "YYYY-MM-DD").isValid() ||
+                    !moment(formik.values.sDate).isSameOrAfter(
+                      moment().format("YYYY-MM-DD")
+                    )
+                  ) {
+                    formik.setFieldValue("sDate", "");
+                    formik.setFieldValue("eDate", "");
+                  }
                 }}
                 error={formik.touched.sDate && Boolean(formik.errors.sDate)}
                 // helperText={formik.touched.sDate && formik.errors.sDate}
@@ -405,18 +424,22 @@ const OrderForm = ({
               delArea={delArea}
               setAddress={setAddress}
               address={address}
+              selectedAdd={selectedAdd}
+              setSelectedAdd={setSelectedAdd}
               error={addErr}
               delAreaNote={delAreaNote}
               setCoord={setCoord}
               tname={tname}
             />
           )}
-          <Typography
-            variant={"h6"}
-            style={{ marginTop: 50, fontWeight: "bold" }}
-          >
-            Order Summary
-          </Typography>
+          <Grid item xs={12}>
+            <Typography
+              variant={"h6"}
+              style={{ marginTop: 50, fontWeight: "bold" }}
+            >
+              Order Summary
+            </Typography>
+          </Grid>
           <Grid item xs={12} container>
             <Grid
               item
@@ -593,7 +616,6 @@ const OrderForm = ({
               and enter the confirmation number below
             </Typography>
           </Grid>
-
           <TextField
             fullWidth
             id="confNum"
@@ -622,35 +644,38 @@ const OrderForm = ({
                   });
                 }
                 if (formik.values.selPlan === "") {
-                  document.getElementById("selPlan").scrollIntoView({
+                  document.getElementById("selPlan")?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
                   });
                 }
                 if (formik.values.menuOpt === "") {
-                  document.getElementById("menuOpt").scrollIntoView({
+                  document.getElementById("menuOpt")?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
                   });
                 }
                 if (formik.values.rrOpt === "") {
-                  document.getElementById("rrOpt").scrollIntoView({
+                  document.getElementById("rrOpt")?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
                   });
                 }
                 if (formik.values.sDate === "") {
-                  document.getElementById("sDate").scrollIntoView({
+                  document.getElementById("sDate")?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
                   });
                 }
-                if (formik.values.serviceOpt === "Delivery" && !address) {
-                  document.getElementById("serviceOpt").scrollIntoView({
+                if (
+                  formik.values.serviceOpt === "Delivery" &&
+                  (!address || address !== selectedAdd)
+                ) {
+                  document.getElementById("serviceOpt")?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",

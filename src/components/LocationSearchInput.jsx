@@ -12,7 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useTheme } from "@mui/material/styles";
-import { Alert, AlertTitle, Typography } from "@mui/material";
+import { Alert, AlertTitle, Grid, Typography } from "@mui/material";
 const LocationSearchInput = ({
   delArea,
   setAddress,
@@ -21,6 +21,8 @@ const LocationSearchInput = ({
   address,
   delAreaNote,
   tname,
+  selectedAdd,
+  setSelectedAdd,
 }) => {
   const [locAddress, setLocAddress] = useState(address);
   const [open, setOpen] = React.useState(false);
@@ -43,6 +45,7 @@ const LocationSearchInput = ({
     try {
       const results = await geocodeByAddress(address);
       const address_array = results[0].address_components;
+      setSelectedAdd(address);
       if (
         address_array[address_array.length - 1].types[0] === "postal_code" &&
         delArea?.includes(
@@ -59,7 +62,7 @@ const LocationSearchInput = ({
       console.log(err);
     }
   };
-
+  const errorShow = (selectedAdd !== address && touched) || (error && touched);
   return (
     <>
       <div>
@@ -131,9 +134,11 @@ const LocationSearchInput = ({
           </>
         )}
       </PlacesAutocomplete>
-      {error && touched && (
-        <div style={{ color: "red" }}>Please select from suggestions.</div>
-      )}
+      <Grid item xs={12}>
+        {errorShow && (
+          <div style={{ color: "red" }}>Please select from suggestions.</div>
+        )}
+      </Grid>
     </>
   );
 };
