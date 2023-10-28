@@ -5,7 +5,7 @@ import ServiceOutline from "./ServiceOutline";
 const ServicesList = ({ services = [] }) => {
   return (
     <>
-      <Grid container>
+      <Grid container style={{ paddingInline: 10 }}>
         {services.map((service) => (
           <ServiceOutline key={service} service={service} />
         ))}

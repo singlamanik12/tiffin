@@ -22,7 +22,7 @@ export default function ImageCarousel({ pics }) {
       }
     >
       {pics.map((pic, index) => (
-        <Carousel.Item variant="black" key="index">
+        <Carousel.Item variant="black" key={index}>
           <img
             className="d-block w-100"
             src={pic.url}

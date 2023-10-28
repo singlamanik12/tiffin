@@ -17,6 +17,7 @@ const ServiceRoutes = () => {
       <Route path="/orders" element={<OrdersList />} />
       <Route path="/success" element={<Success />} />
       <Route path="/failed" element={<Failed />} />
+      <Route path="/:code" element={<MenuSelection />} />
       <Route path="/" element={<Home />} />
     </Routes>
   );

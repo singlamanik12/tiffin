@@ -10,17 +10,25 @@ import {
   FormControl,
   Snackbar,
   Alert,
+  Divider,
+  Chip,
 } from "@mui/material";
 import LocationSearchInput from "./LocationSearchInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import DataContext from "../api/context";
 import axios from "axios";
-import { payOrder, payOrderAccount, saveOrder } from "../api/order";
+import {
+  payOrder,
+  payOrderAccount,
+  saveOnlineOrder,
+  saveOrder,
+} from "../api/order";
 import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { getPaymentConfig } from "../api/payment";
 const OrderSchema = Yup.object().shape({
   menuOpt: Yup.object().shape({}).required("Required"),
   rrOpt: Yup.object().shape({}).required("Required"),
@@ -33,6 +41,7 @@ const OrderSchema = Yup.object().shape({
   confNum: Yup.string().required("Required"),
   deliveryCharges: Yup.string().required("Required"),
   serviceOpt: Yup.string().required("Required"),
+  paymentMode: Yup.string().required("Required"),
 });
 const OrderForm = ({
   SelID,
@@ -46,6 +55,7 @@ const OrderForm = ({
   delArea,
   isVerified,
   delAreaNote,
+  paymentModesEnabled,
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
@@ -56,6 +66,7 @@ const OrderForm = ({
 
   const [extras, setExtras] = useState({});
   const [extrasOptions, setExtrasOptions] = useState([]);
+  const [paymentOptions, setPaymentOptions] = useState([]);
   const [systemExtras, setSystemExtras] = useState({});
   const [snack, setSnack] = useState(false);
   const [initial, setInitial] = useState({
@@ -67,8 +78,9 @@ const OrderForm = ({
     days: 0,
     deliveryCharges: "",
     sDate: "",
-    confNum: "",
+    confNum: "N/A",
     serviceOpt: "Delivery",
+    paymentMode: "card",
   });
   const loadPayAccount = async () => {
     setSellerAccount(await payOrderAccount(SelID));
@@ -113,9 +125,14 @@ const OrderForm = ({
 
     return !isNaN(total) ? (total + total * 0.13).toFixed(2) : (0).toFixed(2);
   };
+  const getPaymentOptions = async () => {
+    const { data } = await getPaymentConfig(paymentModesEnabled);
+    setPaymentOptions(data);
+  };
   useEffect(() => {
     loadPayAccount();
     getExtrasConfig();
+    getPaymentOptions();
   }, []);
   const formik = useFormik({
     initialValues: initial,
@@ -139,15 +156,30 @@ const OrderForm = ({
           values.SelID = SelID;
           values.tname = tname;
           let temp = Object.assign({}, values, user);
-          // const result = await payOrder({
-          //   tname: tname,
-          //   price: values.totalPrice * 100,
-          //   sellerAccount: "acct_1LJjvEQq63yTe9HR",
-          // });
-          // console.log(result);
-          const data = await saveOrder(temp);
-          setLoading(false);
-          window.location.href = "/orders";
+
+          if (values.paymentMode === "card") {
+            const result = await payOrder({
+              tname: tname,
+              price: values.totalPrice * 100,
+              sellerAccount: sellerAccount,
+            });
+            temp.checkoutSession = result;
+            temp.isOnlineOrder = true;
+            const { data: stripeData } = temp.checkoutSession;
+            temp.ch_id = stripeData.id;
+            const res = await saveOnlineOrder(temp);
+            temp.cusOrderId = res.insertedId;
+            const data = await saveOrder(temp);
+
+            window.location.href = stripeData.url;
+            setLoading(false);
+          } else {
+            temp.isOnlineOrder = true;
+            const data = await saveOrder(temp);
+
+            window.location.href = "/orders";
+            setLoading(false);
+          }
         } else {
           setOpen(true);
         }
@@ -217,6 +249,7 @@ const OrderForm = ({
                   formik.setFieldValue("rrOpt", "");
                   formik.setFieldValue("menuOpt", "");
                   formik.setFieldValue("price", "");
+                  formik.setFieldValue("sDate", "");
                   formik.setFieldValue("selPlan", e.target.value);
                   setExtras(e.target.value?.extrasPrice);
                   formik.setFieldValue(
@@ -374,6 +407,9 @@ const OrderForm = ({
                       moment().format("YYYY-MM-DD")
                     )
                   ) {
+                    window.alert(
+                      "Please enter the correct date (today or any future date)"
+                    );
                     formik.setFieldValue("sDate", "");
                     formik.setFieldValue("eDate", "");
                   }
@@ -582,49 +618,82 @@ const OrderForm = ({
               </Typography>
             </Grid>
           )}
-          <Grid item xs={12} container>
-            <Typography variant="h6" style={{ marginTop: 10 }}>
-              Confirmation number
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            container
-            alignItems="center"
-            style={{ marginBottom: 20, marginTop: 10 }}
-          >
-            <Typography
-              variant="body1"
-              style={{
-                marginLeft: 10,
-                alignItems: "center",
+          <FormControl fullWidth style={{ marginTop: 30, marginBottom: 10 }}>
+            <InputLabel id={"paymentMode"}>Pay using</InputLabel>
+            <Select
+              id="paymentMode"
+              name="paymentMode"
+              values={formik.values.paymentMode}
+              defaultValue={
+                formik.values.paymentMode === undefined
+                  ? "card"
+                  : formik.values.paymentMode
+              }
+              label="Pay using"
+              onChange={(e) => {
+                if (e.target.value === "interac") {
+                  formik.setFieldValue("confNum", "");
+                } else {
+                  formik.setFieldValue("confNum", "N/A");
+                }
+                formik.setFieldValue("paymentMode", e.target.value);
               }}
+              error={
+                formik.touched.paymentMode && Boolean(formik.errors.paymentMode)
+              }
             >
-              <InfoIcon color="warning" style={{ marginRight: 10 }} />
-              Please interac the amount to{" "}
-              <span style={{ fontWeight: "bolder" }}>{interacEmail}</span>{" "}
-              <span
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  navigator.clipboard.writeText(interacEmail);
-                  setSnack(true);
-                }}
+              {paymentOptions.map((option, index) => (
+                <MenuItem key={index} value={option.value}>
+                  {option.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {formik.values.paymentMode === "interac" && (
+            <>
+              <Grid
+                item
+                xs={12}
+                container
+                alignItems="center"
+                style={{ marginBottom: 20, marginTop: 10 }}
               >
-                <ContentCopyIcon />
-              </span>{" "}
-              and enter the confirmation number below
-            </Typography>
-          </Grid>
-          <TextField
-            fullWidth
-            id="confNum"
-            name="confNum"
-            label="Confirmation number"
-            onChange={formik.handleChange}
-            style={{ marginBottom: 20 }}
-            error={formik.touched.confNum && Boolean(formik.errors.confNum)}
-          />
+                <Typography
+                  variant="body1"
+                  style={{
+                    marginLeft: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <InfoIcon color="warning" style={{ marginRight: 10 }} />
+                  Please interac the amount to{" "}
+                  <span style={{ fontWeight: "bolder" }}>
+                    {interacEmail}
+                  </span>{" "}
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigator.clipboard.writeText(interacEmail);
+                      setSnack(true);
+                    }}
+                  >
+                    <ContentCopyIcon />
+                  </span>{" "}
+                  and enter the confirmation number below
+                </Typography>
+              </Grid>
+              <TextField
+                fullWidth
+                id="confNum"
+                name="confNum"
+                label="Confirmation number"
+                onChange={formik.handleChange}
+                style={{ marginBottom: 20 }}
+                error={formik.touched.confNum && Boolean(formik.errors.confNum)}
+              />
+            </>
+          )}
           {!!!sellerAccount || !isVerified ? (
             <Typography color="secondary">
               Seller currently doesn't accept any orders

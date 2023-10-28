@@ -16,7 +16,10 @@ const saveOrder = async (values) => {
   const { data } = await axios.post(api + "/order/new", values);
   return data;
 };
-
+const saveOnlineOrder = async (values) => {
+  const { data } = await axios.post(api + "/online/order/new", values);
+  return data;
+};
 const getPastOrders = async (values) => {
   const { data } = await axios.get(api + "/order/past/" + values);
   return data;
@@ -32,4 +35,5 @@ export {
   saveOrder,
   getPastOrders,
   getPendingOrders,
+  saveOnlineOrder,
 };

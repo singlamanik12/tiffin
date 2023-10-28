@@ -56,6 +56,8 @@ export default function MenuChoice({ values }) {
     interacEmail,
     delArea,
     delAreaNote,
+    code,
+    paymentModesEnabled,
   } = values;
   const getPhoneNumber = async () => {
     const { data } = await getSellerById(SelID);
@@ -127,7 +129,7 @@ export default function MenuChoice({ values }) {
               await navigator.share({
                 title: "DT Meals",
                 text: `Book your tiffin from ${tname} on DT Meals.`,
-                url: `https://dtmeals.com/menu/${_id}`,
+                url: `https://dtmeals.com/${code}`,
               });
             }}
           >
@@ -255,6 +257,7 @@ export default function MenuChoice({ values }) {
           interacEmail={interacEmail}
           notifyEmail={notifyEmail}
           delAreaNote={delAreaNote}
+          paymentModesEnabled={paymentModesEnabled}
         />
       </Grid>
     </Layout>

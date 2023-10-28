@@ -14,10 +14,19 @@ const ServiceOutline = ({ service }) => {
         style={{ cursor: "pointer" }}
         onClick={() => navigate(`/menu/${_id}`)}
       >
-        <Grid item xs={12} style={{ marginBottom: 10 }}>
+        <Grid
+          item
+          xs={12}
+          style={{
+            marginBottom: 10,
+            backgroundColor: "#D3D3D3",
+          }}
+          container
+          justifyContent="center"
+        >
           <img
-            style={{ width: "100%", height: "200px" }}
-            src={service.pics[0].url}
+            style={{ width: "auto", height: "300px" }}
+            src={service.banner}
             alt="logo"
           />
         </Grid>

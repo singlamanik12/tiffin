@@ -15,14 +15,15 @@ const Footer = () => {
           paddingBlock: 30,
         }}
       >
-        <Grid xs={1} />
-        <Grid xs={5} container style={{ color: "black" }}>
+        <Grid item xs={1} container />
+        <Grid item xs={5} container style={{ color: "black" }}>
           <Grid item xs={12}>
             <Typography variant="h6">DT Meals</Typography>
           </Grid>
         </Grid>
 
         <Grid
+          item
           xs={5}
           container
           style={{ color: "black" }}
@@ -59,14 +60,14 @@ const Footer = () => {
             <Typography variant="body2">help.dtmeals@gmail.com</Typography>
           </Grid>
         </Grid>
-        <Grid xs={1} />
+        <Grid item xs={1} container />
       </Grid>
       <Grid
         item
         xs={12}
         container
         alignItems="center"
-        justifyCenter="center"
+        // justifyCenter="center"
         direction="column"
         style={{ paddingBlock: 20 }}
       >
@@ -87,7 +88,7 @@ const Footer = () => {
         xs={12}
         container
         alignItems="center"
-        justifyCenter="center"
+        // justifyCenter="center"
         direction="column"
         style={{ paddingBlock: 20 }}
       >

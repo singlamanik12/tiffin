@@ -11,14 +11,16 @@ const OrdersList = () => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [systemExtras, setSystemExtras] = useState([]);
   const getOrders = async () => {
-    setLoading(true);
-    const { data } = await axios.get(
-      "https://singlamanik12.github.io/tiffin-conf/extras.json"
-    );
-    setSystemExtras(Object.keys(data));
-    setPendingOrders(await getPendingOrders({ CusID: user.CusID }));
-    setOrders(await getPastOrders(user.CusID));
-    setLoading(false);
+    if (user.CusID) {
+      setLoading(true);
+      const { data } = await axios.get(
+        "https://singlamanik12.github.io/tiffin-conf/extras.json"
+      );
+      setSystemExtras(Object.keys(data));
+      setPendingOrders(await getPendingOrders({ CusID: user.CusID }));
+      setOrders(await getPastOrders(user.CusID));
+      setLoading(false);
+    }
   };
   useEffect(() => {
     getOrders();
@@ -48,10 +50,10 @@ const OrdersList = () => {
                   <Typography style={{ fontWeight: "bold" }}>
                     {order?.tname}
                   </Typography>
-                  {order.selPlan?.planName && (
+                  {order?.selPlan?.planName && (
                     <Typography>{order.prodType?.prodName}</Typography>
                   )}
-                  {order.selPlan?.planName && (
+                  {order?.selPlan?.planName && (
                     <Typography>{order.selPlan?.planName}</Typography>
                   )}
 
@@ -204,7 +206,7 @@ const OrdersList = () => {
           </Grid>
         )} */}
         {orders?.length > 0 &&
-          orders.map(({ sDate, eDate, previewData }) => (
+          orders.map((order) => (
             <>
               {" "}
               <Grid item xs={12} container>
@@ -216,45 +218,39 @@ const OrdersList = () => {
                   style={{ marginTop: 20 }}
                 >
                   <Typography style={{ fontWeight: "bold" }}>
-                    {previewData?.tname}
+                    {order?.tname}
                   </Typography>
-                  {previewData.selPlan?.planName && (
-                    <Typography>{previewData.selPlan?.planName}</Typography>
+                  {order.selPlan?.planName && (
+                    <Typography>{order.selPlan?.planName}</Typography>
                   )}
 
-                  <Typography>{previewData.menuOpt.menuType}</Typography>
+                  <Typography>{order.menuOpt.menuType}</Typography>
 
-                  {previewData.rrOpt && (
+                  {order.rrOpt && (
                     <Typography>
-                      {previewData.rrOpt?.roti > 0
-                        ? previewData.rrOpt?.roti
-                        : "no"}{" "}
-                      roti &{" "}
-                      {previewData.rrOpt?.rice > 0
-                        ? previewData.rrOpt?.rice
-                        : "no"}{" "}
-                      rice
+                      {order.rrOpt?.roti > 0 ? order.rrOpt?.roti : "no"} roti &{" "}
+                      {order.rrOpt?.rice > 0 ? order.rrOpt?.rice : "no"} rice
                     </Typography>
                   )}
 
                   {systemExtras?.map((key) => {
                     return (
-                      parseInt(previewData[key]) > 0 && (
+                      parseInt(order[key]) > 0 && (
                         <Typography key={key}>
-                          {previewData[key]}
+                          {order[key]}
                           {" Extra " + _.capitalize(key.substring(1))}
                         </Typography>
                       )
                     );
                   })}
 
-                  {/* {!!previewData.selPlan?.days && (
+                  {/* {!!order.selPlan?.days && (
                 <Grid style={{ backgroundColor: "whitesmoke" }}>
                   <Typography>
                     Ends on
                     <Typography style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      {moment(previewData?.sDate, "YYYY-MM-DD")
-                        .add(previewData.selPlan?.days, "days")
+                      {moment(order?.sDate, "YYYY-MM-DD")
+                        .add(order.selPlan?.days, "days")
                         .format("YYYY-MM-DD")}
                     </Typography>
                   </Typography>
@@ -279,7 +275,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {previewData.cost}
+                        {order.cost}
                       </span>
                     </Typography>
                   </Grid>
@@ -300,7 +296,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {previewData.tax}
+                        {order.tax}
                       </span>
                     </Typography>
                   </Grid>
@@ -331,7 +327,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {previewData.totalPrice}
+                        {order.totalPrice}
                       </span>
                     </Typography>
                   </Grid>
@@ -339,10 +335,10 @@ const OrdersList = () => {
               </Grid>
               <Grid item xs={12} style={{ marginBlock: 5 }}>
                 <Typography>
-                  <span>{previewData?.request}</span>
+                  <span>{order?.request}</span>
                 </Typography>
               </Grid>
-              {!!previewData.selPlan?.days && (
+              {!!order.selPlan?.days && (
                 <Grid
                   style={{
                     backgroundColor: "whitesmoke",
@@ -352,7 +348,7 @@ const OrdersList = () => {
                 >
                   <Typography>
                     <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      {sDate + " - " + eDate}
+                      {order.sDate + " - " + order.eDate}
                     </span>
                   </Typography>
                 </Grid>
