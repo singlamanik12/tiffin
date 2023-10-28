@@ -27,11 +27,15 @@ const getSellerById = async (values) => {
   const result = await axios.get(api + "/seller/" + values.toString());
   return result;
 };
-
+const getWebsiteConfig = async (values) => {
+  const result = await axios.post(api + "/website/config", values);
+  return result;
+};
 export {
   updateMenu,
   getMenuBySelId,
   getMenuByCity,
   getSellerById,
   getMenuByCode,
+  getWebsiteConfig,
 };

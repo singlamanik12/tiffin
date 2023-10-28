@@ -30,9 +30,10 @@ const EnableColorOnDarkAppBar = () => {
               marginLeft: 5,
               textAlign: "center",
             }}
-            onClick={() => navigate(`/`)}
           >
-            DT <span style={{ fontWeight: "bolder" }}>Meals</span>
+            <span onClick={() => navigate(`/`)}>
+              DT <span style={{ fontWeight: "bolder" }}>Meals</span>
+            </span>
           </Typography>
           {/* <Button color="inherit" onClick={() => setOpen(true)}>
       Login/SignUp

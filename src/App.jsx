@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Alert, createTheme, ThemeProvider } from "@mui/material";
 import DataContext from "./api/context";
 import LoginForm from "./components/LoginForm";
 import ServiceRoutes from "./components/Routes";
@@ -8,6 +8,7 @@ import { Grid } from "@mui/material";
 import AppBar from "./components/AppBar";
 import Loading from "./shared/Loading";
 import Merriweather from "./resources/Merriweather-Regular.ttf";
+import { getWebsiteConfig } from "./api/menu";
 
 const App = () => {
   const [open, setOpen] = useState(false);
@@ -16,6 +17,13 @@ const App = () => {
   const [side, setSide] = React.useState({
     left: false,
   });
+  const [webConfig, setWebConfig] = useState();
+  const configWebsite = async () => {
+    const { data } = await getWebsiteConfig({
+      domainName: window.location.hostname,
+    });
+    setWebConfig(data);
+  };
   const theme = createTheme({
     typography: {
       fontFamily: "Merriweather, sans-serif",
@@ -39,6 +47,7 @@ const App = () => {
 
   useEffect(() => {
     const data = localStorage.getItem("user");
+    configWebsite();
     setUser(JSON.parse(data));
   }, []);
   return (
@@ -57,9 +66,19 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <AppBar />
         <LoginForm />
+
         <Grid container style={{ minHeight: "80vh" }}>
           <Loading />
-          <ServiceRoutes />
+          {(webConfig?.status && webConfig.status === "live") ||
+          webConfig?.exceptions.includes(user?.CusID) ? (
+            <ServiceRoutes />
+          ) : (
+            <Grid item xs={12}>
+              <Alert severity="error">
+                {webConfig?.config[webConfig.status].message}
+              </Alert>
+            </Grid>
+          )}
         </Grid>
         <Footer />
       </ThemeProvider>

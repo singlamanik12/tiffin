@@ -11,7 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 export default function SideBar() {
   const navigate = useNavigate();
-  const { user, setUser, side, setSide } = React.useContext(DataContext);
+  const { user, setUser, side, setSide, setOpen } =
+    React.useContext(DataContext);
   const onSignOut = () => {
     setUser({});
     localStorage.removeItem("user");
@@ -36,39 +37,45 @@ export default function SideBar() {
       onKeyDown={toggleDrawer("left", false)}
     >
       <List>
-        <ListItem button key="Home" onClick={() => navigate("/")}>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button key="Orders" onClick={() => navigate("/orders")}>
-          <ListItemText primary="Orders" />
-        </ListItem>
-        <ListItem button key="SignOut" onClick={() => onSignOut()}>
-          <ListItemText primary="SignOut" />
-        </ListItem>
+        {user ? (
+          <>
+            <ListItem button key="Home" onClick={() => navigate("/")}>
+              <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button key="Orders" onClick={() => navigate("/orders")}>
+              <ListItemText primary="Orders" />
+            </ListItem>
+            <ListItem button key="SignOut" onClick={() => onSignOut()}>
+              <ListItemText primary="SignOut" />
+            </ListItem>
+          </>
+        ) : (
+          <ListItem button key="SignIn" onClick={() => setOpen(true)}>
+            <ListItemText primary="SignIn" />
+          </ListItem>
+        )}
       </List>
       <Divider />
     </Box>
   );
 
   return (
-    user && (
-      <div>
-        {["left"].map((anchor) => (
-          <React.Fragment key={anchor}>
-            <IconButton onClick={toggleDrawer(anchor, true)}>
-              {" "}
-              <MenuIcon fontSize="small" />
-            </IconButton>
-            <Drawer
-              anchor={anchor}
-              open={side[anchor]}
-              onClose={toggleDrawer(anchor, false)}
-            >
-              {list(anchor)}
-            </Drawer>
-          </React.Fragment>
-        ))}
-      </div>
-    )
+    <div>
+      {["left"].map((anchor) => (
+        <React.Fragment key={anchor}>
+          <IconButton onClick={toggleDrawer(anchor, true)}>
+            {" "}
+            <MenuIcon fontSize="small" />
+          </IconButton>
+          <Drawer
+            anchor={anchor}
+            open={side[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {list(anchor)}
+          </Drawer>
+        </React.Fragment>
+      ))}
+    </div>
   );
 }
