@@ -51,7 +51,7 @@ export default function SideBar() {
           </>
         ) : (
           <ListItem button key="SignIn" onClick={() => setOpen(true)}>
-            <ListItemText primary="SignIn" />
+            <ListItemText primary="Sign In/ Log In" />
           </ListItem>
         )}
       </List>

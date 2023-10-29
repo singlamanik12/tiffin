@@ -102,7 +102,7 @@ export default function MenuChoice({ values }) {
           <Typography
             style={{ fontSize: 35, fontWeight: "bolder", marginLeft: 15 }}
           >
-            Desi Tadka
+            {tname}
           </Typography>
         </Grid>
         <Grid

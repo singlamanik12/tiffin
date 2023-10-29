@@ -165,6 +165,8 @@ const OrderForm = ({
             });
             temp.checkoutSession = result;
             temp.isOnlineOrder = true;
+            temp.serviceFee = (values.totalPrice * 0.05).toFixed(2);
+            temp.payout = (values.totalPrice - temp.serviceFee).toFixed(2);
             const { data: stripeData } = temp.checkoutSession;
             temp.ch_id = stripeData.id;
             const res = await saveOnlineOrder(temp);
