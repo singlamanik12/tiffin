@@ -247,7 +247,13 @@ const OrderForm = ({
                   formik.setFieldValue("rrOpt", "");
                   formik.setFieldValue("menuOpt", "");
                   formik.setFieldValue("price", "");
-                  formik.setFieldValue("sDate", "");
+                  formik.setFieldValue("sDate", moment().format("YYYY-MM-DD"));
+                  formik.setFieldValue(
+                    "eDate",
+                    moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD")
+                      .add(e.target.value?.days, "days")
+                      .format("YYYY-MM-DD")
+                  );
                   formik.setFieldValue("selPlan", e.target.value);
                   setExtras(e.target.value?.extrasPrice);
                   formik.setFieldValue(
@@ -368,7 +374,7 @@ const OrderForm = ({
                 id="sDate"
                 fullWidth
                 name="sDate"
-                type="text"
+                type="date"
                 label="Start Date"
                 variant="outlined"
                 placeholder="YYYY-MM-DD"
@@ -380,28 +386,17 @@ const OrderForm = ({
                   const inputDate = e.target.value;
 
                   // Remove non-numeric characters
-                  const numericDate = inputDate.replace(/\D/g, "");
+                  // const numericDate = inputDate.replace(/\D/g, "");
 
                   // Format the date as the user types (YYYY-MM-DD)
-                  if (numericDate.length <= 8) {
-                    const formattedDate =
-                      numericDate.slice(0, 4) +
-                      (numericDate[4] ? "-" + numericDate.slice(4, 6) : "") +
-                      (numericDate[6] ? "-" + numericDate.slice(6, 8) : "");
-                    formik.setFieldValue("sDate", formattedDate);
-                    formik.setFieldValue(
-                      "eDate",
-                      moment(formattedDate, "YYYY-MM-DD")
-                        .add(formik.values.selPlan?.days, "days")
-                        .format("YYYY-MM-DD")
-                    );
-                  }
-                }}
-                onBlur={(e) => {
+                  // if (numericDate.length <= 8) {
+                  //   const formattedDate =
+                  //     numericDate.slice(0, 4) +
+                  //     (numericDate[4] ? "-" + numericDate.slice(4, 6) : "") +
+                  //     (numericDate[6] ? "-" + numericDate.slice(6, 8) : "");
                   if (
-                    formik.values.sDate?.length !== 10 ||
-                    !moment(formik.values.sDate, "YYYY-MM-DD").isValid() ||
-                    !moment(formik.values.sDate).isSameOrAfter(
+                    !moment(inputDate, "YYYY-MM-DD").isValid() ||
+                    !moment(inputDate).isSameOrAfter(
                       moment().format("YYYY-MM-DD")
                     )
                   ) {
@@ -410,8 +405,32 @@ const OrderForm = ({
                     );
                     formik.setFieldValue("sDate", "");
                     formik.setFieldValue("eDate", "");
+                  } else {
+                    formik.setFieldValue("sDate", inputDate);
+                    formik.setFieldValue(
+                      "eDate",
+                      moment(inputDate, "YYYY-MM-DD")
+                        .add(formik.values.selPlan?.days, "days")
+                        .format("YYYY-MM-DD")
+                    );
                   }
+                  // }
                 }}
+                // onBlur={(e) => {
+                //   if (
+                //     formik.values.sDate?.length !== 10 ||
+                //     !moment(formik.values.sDate, "YYYY-MM-DD").isValid() ||
+                //     !moment(formik.values.sDate).isSameOrAfter(
+                //       moment().format("YYYY-MM-DD")
+                //     )
+                //   ) {
+                //     window.alert(
+                //       "Please enter the correct date (today or any future date)"
+                //     );
+                //     formik.setFieldValue("sDate", "");
+                //     formik.setFieldValue("eDate", "");
+                //   }
+                // }}
                 error={formik.touched.sDate && Boolean(formik.errors.sDate)}
                 // helperText={formik.touched.sDate && formik.errors.sDate}
               />
