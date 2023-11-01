@@ -63,25 +63,14 @@ const App = () => {
         setLoading,
       }}
     >
-      <ThemeProvider theme={theme}>
-        <AppBar />
-        <LoginForm />
+      <AppBar />
+      <LoginForm />
 
-        <Grid container style={{ minHeight: "80vh" }}>
-          <Loading />
-          {(webConfig?.status && webConfig.status === "live") ||
-          webConfig?.exceptions.includes(user?.CusID) ? (
-            <ServiceRoutes />
-          ) : (
-            <Grid item xs={12}>
-              <Alert severity="error">
-                {webConfig?.config[webConfig.status].message}
-              </Alert>
-            </Grid>
-          )}
-        </Grid>
-        <Footer />
-      </ThemeProvider>
+      <Grid container style={{ minHeight: "80vh" }}>
+        <Loading />
+        <ServiceRoutes />
+      </Grid>
+      <Footer />
     </DataContext.Provider>
   );
 };

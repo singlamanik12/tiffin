@@ -1,10 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
+  Alert,
+  Button,
   Chip,
   Divider,
   Grid,
   IconButton,
   Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
   Typography,
 } from "@mui/material";
 import Layout from "../shared/Layout";
@@ -18,6 +25,7 @@ import orderNow from "./../resources/ordernow.gif";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import IosShareIcon from "@mui/icons-material/IosShare";
+import KitchenIcon from "@mui/icons-material/Kitchen";
 export default function MenuChoice({ values }) {
   const { setOpen } = useContext(DataContext);
   const [done, setDone] = useState(false);
@@ -74,6 +82,13 @@ export default function MenuChoice({ values }) {
       Object.assign({}, selected, { [event.target.name]: event.target.value })
     );
   };
+  const allGradients = [
+    "linear-gradient(to right, #FF5F6D , #FFC371)",
+    "linear-gradient(to right, #BFF098 , #6FD6FF)",
+    "linear-gradient(to right, #C33764 , #1D2671)",
+    "linear-gradient(to right, #009245 , #FCEE21)",
+    "linear-gradient(to right, #EE9CA7 , #FFDDE1)",
+  ];
   const handleSubmit = () => {
     localStorage.setItem("selected", JSON.stringify(selected));
   };
@@ -136,20 +151,18 @@ export default function MenuChoice({ values }) {
             <IosShareIcon />
           </IconButton>
         </Grid>
-        <Grid item xs={12} direction="row" style={{ marginBlock: 20 }}>
-          <Divider />
-        </Grid>
+
         <Grid item xs={12} style={{ marginBlock: 20 }}>
-          <ImageCarousel pics={pics} />
+          <img src={banner} style={{ width: "100%" }} />
         </Grid>
         <Grid item xs={12} direction="row">
-          <Divider>
+          {/* <Divider>
             <Chip
               label="Meal Plans"
               style={{ fontSize: 23, fontWeight: "bolder" }}
             />
-          </Divider>
-          {products?.map((product) => (
+          </Divider> */}
+          {products?.map((product, key) => (
             <Grid
               item
               xs={12}
@@ -158,15 +171,67 @@ export default function MenuChoice({ values }) {
               direction="column"
               alignItems="center"
               justifyContent="center"
+              style={{ padding: 20 }}
             >
-              <Typography
-                fontSize={25}
-                fontWeight="bolder"
-                style={{ marginTop: 20 }}
-              >
-                {product.prodName}
-              </Typography>
-              <Typography>{product.description}</Typography>
+              <Paper elevation={3} style={{ borderRadius: 15, width: "100%" }}>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  style={{
+                    backgroundImage: allGradients[key],
+                    color: "white",
+                    padding: 15,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 10,
+                  }}
+                >
+                  <Typography
+                    fontSize={20}
+                    fontWeight="bold"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {product.prodName}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  style={{
+                    padding: 15,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography style={{ fontWeight: "bold" }}>
+                    {product.description}
+                  </Typography>
+                </Grid>
+                {/* <Grid
+                  item
+                  xs={12}
+                  container
+                  style={{
+                    padding: 15,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundImage: allGradients[key],
+                      padding: 6,
+                      borderRadius: 20,
+                      paddingInline: 20,
+                      marginBottom: 15,
+                    }}
+                  >
+                    <Typography style={{ color: "white" }}>Book now</Typography>
+                  </div>
+                </Grid> */}
+              </Paper>
             </Grid>
           ))}
         </Grid>
@@ -191,51 +256,46 @@ export default function MenuChoice({ values }) {
         {/* <div id="imgcarousel">
           <ImageCarousel pics={pics} />
         </div> */}
-        <Grid item xs={12} direction="row" style={{ marginTop: 20 }}>
-          <Divider style={{ marginBlock: 20 }}>
-            <Chip
-              label="Additional Information"
-              style={{ fontSize: 23, fontWeight: "bolder" }}
-            />
-          </Divider>
-          {additional_info?.map((info) => (
-            <Grid
-              item
-              xs={12}
-              container
-              alignItems="center"
-              justifyContent="center"
-              key={info}
-            >
-              <Typography style={{ marginTop: 10 }}>{info}</Typography>
-            </Grid>
-          ))}
+        <Grid
+          item
+          xs={12}
+          direction="row"
+          style={{ marginTop: 20, padding: 20 }}
+        >
+          <hr />
+          <List>
+            {additional_info?.map((info) => (
+              <ListItem key={info}>
+                <ListItemIcon>
+                  <KitchenIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>
+                  <Typography>{info}</Typography>
+                </ListItemText>
+              </ListItem>
+            ))}
+            <ListItem>
+              <ListItemIcon>
+                <KitchenIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography>{delAreaNote}</Typography>
+              </ListItemText>
+            </ListItem>
+          </List>
+
+          <hr />
         </Grid>
-        <Grid item xs={12} direction="row" style={{ marginTop: 20 }}>
-          <Divider style={{ marginBlock: 20 }}>
-            <Chip
-              label="Delivery Information"
-              style={{ fontSize: 23, fontWeight: "bolder" }}
-            />
-          </Divider>
-          <Grid
-            item
-            xs={12}
-            container
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Typography>{delAreaNote}</Typography>
-          </Grid>
+        <Alert severity="info" style={{ width: "100%" }}>
+          If you find anything wrong on this page, please contact{" "}
+          <strong>{tname}</strong>
+        </Alert>
+        <Grid item xs={12} style={{ paddingInline: "8px", marginTop: 20 }}>
+          <Typography style={{ fontSize: 25, fontWeight: "bold" }} gutterBottom>
+            Let's Order
+          </Typography>
         </Grid>
-        <Grid item xs={12} style={{ padding: "8px", marginTop: 30 }}>
-          <Divider style={{ marginBlock: 20 }}>
-            <Chip
-              label="Order Now"
-              style={{ fontSize: 23, fontWeight: "bolder" }}
-            />
-          </Divider>
-        </Grid>
+
         <OrderForm
           SelID={SelID}
           tname={tname}

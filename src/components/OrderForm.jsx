@@ -195,10 +195,6 @@ const OrderForm = ({
   const [addErr, setAddErr] = useState(false);
   return (
     <>
-      <Alert severity="info" style={{ width: "100%" }}>
-        If you find anything wrong on this page, please contact{" "}
-        <strong>{tname}</strong>
-      </Alert>
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
         <Grid item container direction="row" style={{ padding: "8px" }}>
           <Snackbar
@@ -473,9 +469,9 @@ const OrderForm = ({
           <Grid item xs={12}>
             <Typography
               variant={"h6"}
-              style={{ marginTop: 50, fontWeight: "bold" }}
+              style={{ marginTop: 20, fontWeight: "bold", fontSize: 25 }}
             >
-              Order Summary
+              Summary
             </Typography>
           </Grid>
           <Grid item xs={12} container>
@@ -753,9 +749,14 @@ const OrderForm = ({
                   });
                 }
               }}
-              style={{ marginTop: 20, backgroundColor: "black" }}
+              style={{
+                marginTop: 20,
+                backgroundColor: "black",
+                fontWeight: "bold",
+                textTransform: "capitalize",
+              }}
             >
-              Order
+              Pay
             </Button>
           )}
         </Grid>
