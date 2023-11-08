@@ -80,7 +80,7 @@ const OrderForm = ({
     sDate: "",
     confNum: "N/A",
     serviceOpt: "Delivery",
-    paymentMode: "card",
+    paymentMode: "",
   });
   const loadPayAccount = async () => {
     setSellerAccount(await payOrderAccount(SelID));
@@ -642,9 +642,7 @@ const OrderForm = ({
               name="paymentMode"
               values={formik.values.paymentMode}
               defaultValue={
-                formik.values.paymentMode === undefined
-                  ? "card"
-                  : formik.values.paymentMode
+                paymentOptions.some((obj) => obj.value === "card") ? "card" : ""
               }
               label="Pay using"
               onChange={(e) => {
