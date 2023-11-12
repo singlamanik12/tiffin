@@ -12,6 +12,7 @@ import {
   Alert,
   Divider,
   Chip,
+  IconButton,
 } from "@mui/material";
 import LocationSearchInput from "./LocationSearchInput";
 import { useFormik } from "formik";
@@ -29,6 +30,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import _ from "lodash";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { getPaymentConfig } from "../api/payment";
+import ServiceFeesDialog from "./ServiceFeesDialog";
 const OrderSchema = Yup.object().shape({
   menuOpt: Yup.object().shape({}).required("Required"),
   rrOpt: Yup.object().shape({}).required("Required"),
@@ -56,6 +58,7 @@ const OrderForm = ({
   isVerified,
   delAreaNote,
   paymentModesEnabled,
+  serviceFees = "0",
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
@@ -67,8 +70,11 @@ const OrderForm = ({
   const [extras, setExtras] = useState({});
   const [extrasOptions, setExtrasOptions] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
+  const [paymentMethodChoose, setPaymentMethodChoose] = useState("");
+  const [defaultPayment, setDefaultPayment] = useState("");
   const [systemExtras, setSystemExtras] = useState({});
   const [snack, setSnack] = useState(false);
+  const [openSFDialog, setOpenSFDialog] = useState(false);
   const [initial, setInitial] = useState({
     prodType: "",
     menuOpt: "",
@@ -93,7 +99,12 @@ const OrderForm = ({
       "https://singlamanik12.github.io/tiffin-conf/extras.json"
     );
     setSystemExtras(data);
-    setInitial({ ...initial, ...data });
+    let payMode;
+    if (paymentModesEnabled.includes("card")) {
+      payMode = "card";
+      setDefaultPayment("card");
+    }
+    setInitial({ ...initial, ...data, ...{ paymentMode: payMode } });
   };
   const getTotal = (values, type) => {
     let extrastotal = 0;
@@ -106,6 +117,9 @@ const OrderForm = ({
       (values?.serviceOpt === "Delivery"
         ? parseFloat(values.deliveryCharges)
         : 0);
+    if (values?.paymentMode === "card") {
+      total = total + (total * parseFloat(serviceFees)) / 100;
+    }
     // if (total === subTotal && total !== 0) {
     //   setCost({
     //     subTotal: !isNaN(total) ? total.toFixed(2) : (0).toFixed(2),
@@ -122,7 +136,6 @@ const OrderForm = ({
     if (type === "cost") {
       return !isNaN(total) ? total.toFixed(2) : (0).toFixed(2);
     }
-
     return !isNaN(total) ? (total + total * 0.13).toFixed(2) : (0).toFixed(2);
   };
   const getPaymentOptions = async () => {
@@ -195,6 +208,11 @@ const OrderForm = ({
   const [addErr, setAddErr] = useState(false);
   return (
     <>
+      <ServiceFeesDialog
+        openSFDialog={openSFDialog}
+        setOpenSFDialog={setOpenSFDialog}
+        serviceFees={serviceFees}
+      />
       <form enableReinitialize={true} onSubmit={formik.handleSubmit}>
         <Grid item container direction="row" style={{ padding: "8px" }}>
           <Snackbar
@@ -485,6 +503,36 @@ const OrderForm = ({
               tname={tname}
             />
           )}
+          {paymentOptions.length > 0 && (
+            <FormControl fullWidth style={{ marginTop: 30, marginBottom: 10 }}>
+              <InputLabel id={"paymentMode"}>Pay using</InputLabel>
+              <Select
+                id="paymentMode"
+                name="paymentMode"
+                values={formik.values.paymentMode}
+                defaultValue={defaultPayment}
+                label="Pay using"
+                onChange={(e) => {
+                  if (e.target.value === "interac") {
+                    formik.setFieldValue("confNum", "");
+                  } else {
+                    formik.setFieldValue("confNum", "N/A");
+                  }
+                  formik.setFieldValue("paymentMode", e.target.value);
+                }}
+                error={
+                  formik.touched.paymentMode &&
+                  Boolean(formik.errors.paymentMode)
+                }
+              >
+                {paymentOptions.map((option, index) => (
+                  <MenuItem key={index} value={option.value}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
           <Grid item xs={12}>
             <Typography
               variant={"h6"}
@@ -506,6 +554,9 @@ const OrderForm = ({
               )}
               {formik.values.selPlan?.planName && (
                 <Typography>{formik.values.selPlan?.planName}</Typography>
+              )}
+              {formik.values?.menuOpt && (
+                <Typography>{formik.values.menuOpt?.menuType}</Typography>
               )}
               {formik.values.rrOpt && (
                 <Typography>
@@ -529,7 +580,11 @@ const OrderForm = ({
                   )
                 );
               })}
-
+              {formik.values?.eDate && (
+                <Typography>
+                  Ends on - <strong>{formik.values?.eDate}</strong>
+                </Typography>
+              )}
               {/* {!!formik.values.selPlan?.days && (
                 <Grid style={{ backgroundColor: "whitesmoke" }}>
                   <Typography>
@@ -549,10 +604,23 @@ const OrderForm = ({
                 xs={12}
                 container
                 justifyContent="right"
+                alignItems="center"
                 style={{ marginTop: 40 }}
               >
                 <Typography>
                   Cost{" "}
+                  {serviceFees && formik.values.paymentMode === "card" && (
+                    <InfoIcon
+                      onClick={() => setOpenSFDialog(true)}
+                      fontSize="small"
+                      style={{
+                        padding: 0,
+                        margin: 0,
+                        paddingBottom: 3,
+                        cursor: "pointer",
+                      }}
+                    />
+                  )}
                   <span
                     style={{
                       fontWeight: "bolder",
@@ -619,51 +687,6 @@ const OrderForm = ({
               </Grid>
             </Grid>
           </Grid>
-          {formik.values?.eDate && (
-            <Grid
-              style={{
-                backgroundColor: "whitesmoke",
-                padding: 10,
-                borderRadius: 20,
-              }}
-            >
-              <Typography>
-                Ends on -{" "}
-                <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                  {formik.values?.eDate}
-                </span>
-              </Typography>
-            </Grid>
-          )}
-          <FormControl fullWidth style={{ marginTop: 30, marginBottom: 10 }}>
-            <InputLabel id={"paymentMode"}>Pay using</InputLabel>
-            <Select
-              id="paymentMode"
-              name="paymentMode"
-              values={formik.values.paymentMode}
-              defaultValue={
-                paymentOptions.some((obj) => obj.value === "card") ? "card" : ""
-              }
-              label="Pay using"
-              onChange={(e) => {
-                if (e.target.value === "interac") {
-                  formik.setFieldValue("confNum", "");
-                } else {
-                  formik.setFieldValue("confNum", "N/A");
-                }
-                formik.setFieldValue("paymentMode", e.target.value);
-              }}
-              error={
-                formik.touched.paymentMode && Boolean(formik.errors.paymentMode)
-              }
-            >
-              {paymentOptions.map((option, index) => (
-                <MenuItem key={index} value={option.value}>
-                  {option.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
           {formik.values.paymentMode === "interac" && (
             <>

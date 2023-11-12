@@ -66,6 +66,7 @@ export default function MenuChoice({ values }) {
     delAreaNote,
     code,
     paymentModesEnabled,
+    serviceFees,
   } = values;
   const getPhoneNumber = async () => {
     const { data } = await getSellerById(SelID);
@@ -318,6 +319,7 @@ export default function MenuChoice({ values }) {
           notifyEmail={notifyEmail}
           delAreaNote={delAreaNote}
           paymentModesEnabled={paymentModesEnabled}
+          serviceFees={serviceFees}
         />
       </Grid>
     </Layout>
