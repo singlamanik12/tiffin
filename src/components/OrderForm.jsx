@@ -732,7 +732,7 @@ const OrderForm = ({
               />
             </>
           )}
-          {!!!sellerAccount || !isVerified ? (
+          {!isVerified ? (
             <Typography color="secondary">
               Seller currently doesn't accept any orders
             </Typography>
