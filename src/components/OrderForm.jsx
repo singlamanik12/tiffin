@@ -1,3 +1,5 @@
+// Use only values in formik, don't use set state
+
 import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
@@ -41,7 +43,6 @@ const OrderSchema = Yup.object().shape({
   sDate: Yup.date().required("Required"),
   eDate: Yup.date().required("Required"),
   confNum: Yup.string().required("Required"),
-  deliveryCharges: Yup.string().required("Required"),
   serviceOpt: Yup.string().required("Required"),
   paymentMode: Yup.string().required("Required"),
 });
@@ -59,6 +60,8 @@ const OrderForm = ({
   delAreaNote,
   paymentModesEnabled,
   serviceFees = "0",
+  plansConfig,
+  postalConfig,
 }) => {
   const { user, setOpen, setLoading } = useContext(DataContext);
   const [sellerAccount, setSellerAccount] = useState();
@@ -82,7 +85,7 @@ const OrderForm = ({
     selPlan: "",
     request: "",
     days: 0,
-    deliveryCharges: "",
+    postalCode: "",
     sDate: "",
     confNum: "N/A",
     serviceOpt: "Delivery",
@@ -106,7 +109,21 @@ const OrderForm = ({
     }
     setInitial({ ...initial, ...data, ...{ paymentMode: payMode } });
   };
+
   const getTotal = (values, type) => {
+    let deliveryCharges = 0;
+    deliveryCharges =
+      plansConfig?.[values?.selPlan?.planName]?.deliveryCharges ?? 0;
+    if (
+      postalConfig?.[values?.postalCode]?.deliveryFees?.[
+        values?.selPlan?.planName
+      ]
+    ) {
+      deliveryCharges =
+        postalConfig?.[values?.postalCode]?.deliveryFees?.[
+          values?.selPlan?.planName
+        ];
+    }
     let extrastotal = 0;
     extrasOptions?.map((option) => {
       extrastotal += values[`x${option}`] * extras[option];
@@ -114,9 +131,7 @@ const OrderForm = ({
     let total =
       extrastotal +
       parseFloat(values?.price) +
-      (values?.serviceOpt === "Delivery"
-        ? parseFloat(values.deliveryCharges)
-        : 0);
+      (values?.serviceOpt === "Delivery" ? parseFloat(deliveryCharges) : 0);
     if (values?.paymentMode === "card") {
       total = total + (total * parseFloat(serviceFees)) / 100;
     }
@@ -130,6 +145,9 @@ const OrderForm = ({
     //   });
     //   setSubTotal(total);
     // }
+    if (type === "delFees") {
+      return !isNaN(deliveryCharges) ? deliveryCharges : (0).toFixed(2);
+    }
     if (type === "tax") {
       return !isNaN(total) ? (total * 0.13).toFixed(2) : (0).toFixed(2);
     }
@@ -161,6 +179,7 @@ const OrderForm = ({
           if (values.serviceOpt !== "Pickup") {
             values.address = address;
             values.coord = coord;
+            values.deliveryCharges = getTotal(values, "delFees");
           }
           values.cost = getTotal(values, "cost");
           values.tax = getTotal(values, "tax");
@@ -191,7 +210,6 @@ const OrderForm = ({
           } else {
             temp.isOnlineOrder = true;
             const data = await saveOrder(temp);
-
             window.location.href = "/orders";
             setLoading(false);
           }
@@ -235,7 +253,6 @@ const OrderForm = ({
                 setExtrasOptions([]);
                 setRrOptions([]);
                 setMenuOptions([]);
-                formik.setFieldValue("deliveryCharges", "");
                 formik.setFieldValue("days", 0);
                 formik.setFieldValue("selPlan", "");
                 formik.setFieldValue("price", "");
@@ -274,10 +291,6 @@ const OrderForm = ({
                   );
                   formik.setFieldValue("selPlan", e.target.value);
                   setExtras(e.target.value?.extrasPrice);
-                  formik.setFieldValue(
-                    "deliveryCharges",
-                    e.target.value?.deliveryCharges
-                  );
                   formik.setFieldValue("days", e.target.value?.days);
                   setMenuOptions(e.target.value?.menuOpts);
                 }}
@@ -501,6 +514,7 @@ const OrderForm = ({
               delAreaNote={delAreaNote}
               setCoord={setCoord}
               tname={tname}
+              setFieldValue={formik.setFieldValue}
             />
           )}
           {paymentOptions.length > 0 && (

@@ -67,6 +67,8 @@ export default function MenuChoice({ values }) {
     code,
     paymentModesEnabled,
     serviceFees,
+    plansConfig,
+    postalConfig,
   } = values;
   const getPhoneNumber = async () => {
     const { data } = await getSellerById(SelID);
@@ -320,6 +322,8 @@ export default function MenuChoice({ values }) {
           delAreaNote={delAreaNote}
           paymentModesEnabled={paymentModesEnabled}
           serviceFees={serviceFees}
+          plansConfig={plansConfig}
+          postalConfig={postalConfig}
         />
       </Grid>
     </Layout>

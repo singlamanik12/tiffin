@@ -23,6 +23,7 @@ const LocationSearchInput = ({
   tname,
   selectedAdd,
   setSelectedAdd,
+  setFieldValue,
 }) => {
   const [locAddress, setLocAddress] = useState(address);
   const [open, setOpen] = React.useState(false);
@@ -52,6 +53,10 @@ const LocationSearchInput = ({
           address_array[address_array.length - 1].long_name.split(" ")[0]
         )
       ) {
+        setFieldValue(
+          "postalCode",
+          address_array[address_array.length - 1].long_name.split(" ")[0]
+        );
         setAddress(address);
         setCoord(await getLatLng(results[0]));
       } else {
