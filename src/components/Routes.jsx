@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Search from "./Search";
 import MenuSelection from "./MenuSelection";
 import Loading from "./../shared/Loading";
@@ -19,6 +19,7 @@ const ServiceRoutes = () => {
       <Route path="/failed" element={<Failed />} />
       <Route path="/:code" element={<MenuSelection />} />
       <Route path="/" element={<Home />} />
+      <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );
 };

@@ -51,18 +51,18 @@ const OrdersList = () => {
                     {order?.tname}
                   </Typography>
                   {order?.selPlan?.planName && (
-                    <Typography>{order.prodType?.prodName}</Typography>
+                    <Typography>{order?.prodType?.prodName}</Typography>
                   )}
                   {order?.selPlan?.planName && (
-                    <Typography>{order.selPlan?.planName}</Typography>
+                    <Typography>{order?.selPlan?.planName}</Typography>
                   )}
 
                   <Typography>{order.menuOpt.menuType}</Typography>
 
-                  {order.rrOpt && (
+                  {order?.previewData?.rrOpt && (
                     <Typography>
-                      {order.rrOpt?.roti > 0 ? order.rrOpt?.roti : "no"} roti &{" "}
-                      {order.rrOpt?.rice > 0 ? order.rrOpt?.rice : "no"} rice
+                      {order.rrOpt?.roti > 0 ? order?.rrOpt?.roti : "no"} roti &{" "}
+                      {order.rrOpt?.rice > 0 ? order?.rrOpt?.rice : "no"} rice
                     </Typography>
                   )}
 
@@ -77,13 +77,21 @@ const OrdersList = () => {
                     );
                   })}
 
-                  {/* {!!order.selPlan?.days && (
+                  <Typography>{order?.sDate + " - " + order?.eDate}</Typography>
+
+                  {order?.request && (
+                    <Typography>
+                      <span>Additional Request</span> - {order?.request}
+                    </Typography>
+                  )}
+
+                  {/* {!!order?.previewData?.selPlan?.days && (
                 <Grid style={{ backgroundColor: "whitesmoke" }}>
                   <Typography>
                     Ends on
                     <Typography style={{ fontWeight: "bolder", fontSize: 20 }}>
                       {moment(order?.sDate, "YYYY-MM-DD")
-                        .add(order.selPlan?.days, "days")
+                        .add(order?.previewData?.selPlan?.days, "days")
                         .format("YYYY-MM-DD")}
                     </Typography>
                   </Typography>
@@ -108,7 +116,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.cost}
+                        {order?.cost}
                       </span>
                     </Typography>
                   </Grid>
@@ -129,7 +137,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.tax}
+                        {order?.tax}
                       </span>
                     </Typography>
                   </Grid>
@@ -160,36 +168,11 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.totalPrice}
+                        {order?.totalPrice}
                       </span>
                     </Typography>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item xs={12} style={{ marginBlock: 5 }}>
-                {order?.request && (
-                  <Typography>
-                    <span>
-                      <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                        Additional Request
-                      </span>{" "}
-                      - {order?.request}
-                    </span>
-                  </Typography>
-                )}
-              </Grid>
-              <Grid
-                style={{
-                  backgroundColor: "whitesmoke",
-                  padding: 10,
-                  borderRadius: 20,
-                }}
-              >
-                <Typography>
-                  <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                    {order.sDate + " - " + order.eDate}
-                  </span>
-                </Typography>
               </Grid>
               <Grid item xs={12} style={{ marginBlock: 5 }}>
                 <Divider style={{ color: "black", height: "1px" }} />
@@ -218,18 +201,28 @@ const OrdersList = () => {
                   style={{ marginTop: 20 }}
                 >
                   <Typography style={{ fontWeight: "bold" }}>
-                    {order?.tname}
+                    {order?.previewData?.tname}
                   </Typography>
-                  {order.selPlan?.planName && (
-                    <Typography>{order.selPlan?.planName}</Typography>
+                  {order?.previewData?.selPlan?.planName && (
+                    <Typography>
+                      {order?.previewData?.selPlan?.planName}
+                    </Typography>
                   )}
 
-                  <Typography>{order.menuOpt.menuType}</Typography>
+                  <Typography>
+                    {order?.previewData?.menuOpt.menuType}
+                  </Typography>
 
-                  {order.rrOpt && (
+                  {order?.previewData?.rrOpt && (
                     <Typography>
-                      {order.rrOpt?.roti > 0 ? order.rrOpt?.roti : "no"} roti &{" "}
-                      {order.rrOpt?.rice > 0 ? order.rrOpt?.rice : "no"} rice
+                      {order?.previewData?.rrOpt?.roti > 0
+                        ? order?.previewData?.rrOpt?.roti
+                        : "no"}{" "}
+                      roti &{" "}
+                      {order?.previewData?.rrOpt?.rice > 0
+                        ? order?.previewData?.rrOpt?.rice
+                        : "no"}{" "}
+                      rice
                     </Typography>
                   )}
 
@@ -243,14 +236,25 @@ const OrdersList = () => {
                       )
                     );
                   })}
+                  {!!order?.previewData?.selPlan?.days && (
+                    <Typography>
+                      {order?.sDate + " - " + order?.eDate}
+                    </Typography>
+                  )}
 
-                  {/* {!!order.selPlan?.days && (
+                  {order?.request && (
+                    <Typography>
+                      <span>Additional Request</span> - {order?.request}
+                    </Typography>
+                  )}
+
+                  {/* {!!order?.previewData?.selPlan?.days && (
                 <Grid style={{ backgroundColor: "whitesmoke" }}>
                   <Typography>
                     Ends on
                     <Typography style={{ fontWeight: "bolder", fontSize: 20 }}>
                       {moment(order?.sDate, "YYYY-MM-DD")
-                        .add(order.selPlan?.days, "days")
+                        .add(order?.previewData?.selPlan?.days, "days")
                         .format("YYYY-MM-DD")}
                     </Typography>
                   </Typography>
@@ -275,7 +279,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.cost}
+                        {order?.previewData?.cost}
                       </span>
                     </Typography>
                   </Grid>
@@ -296,7 +300,7 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.tax}
+                        {order?.previewData?.tax}
                       </span>
                     </Typography>
                   </Grid>
@@ -327,32 +331,12 @@ const OrdersList = () => {
                         }}
                       >
                         <span style={{ marginRight: 2 }}>C$</span>
-                        {order.totalPrice}
+                        {order?.previewData?.totalPrice}
                       </span>
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} style={{ marginBlock: 5 }}>
-                <Typography>
-                  <span>{order?.request}</span>
-                </Typography>
-              </Grid>
-              {!!order.selPlan?.days && (
-                <Grid
-                  style={{
-                    backgroundColor: "whitesmoke",
-                    padding: 10,
-                    borderRadius: 20,
-                  }}
-                >
-                  <Typography>
-                    <span style={{ fontWeight: "bolder", fontSize: 20 }}>
-                      {order.sDate + " - " + order.eDate}
-                    </span>
-                  </Typography>
-                </Grid>
-              )}
               <Grid item xs={12} style={{ marginBlock: 5 }}>
                 <Divider style={{ color: "black", height: "1px" }} />
               </Grid>

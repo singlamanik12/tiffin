@@ -20,8 +20,8 @@ function Home() {
     );
     setCityList(data.cities);
     setLoading(false);
-    const menus = await getMenuByCity();
-    setServices(menus.data);
+    // const menus = await getMenuByCity();
+    // setServices(menus.data);
   };
   useEffect(() => onLoad(), []);
   const handleChange = (event) => {

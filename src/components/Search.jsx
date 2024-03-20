@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { getMenuByCity } from "../api/menu";
 import DataContext from "../api/context";
 import { Grid } from "@mui/material";
+import Loading from "../shared/Loading";
 const Search = () => {
   const [citi, setCity] = React.useState("");
   const [cityList, setCityList] = React.useState([]);
@@ -57,7 +58,7 @@ const Search = () => {
           </Select>
         </FormControl>
       </Grid>
-      <ServicesList services={services} />
+      {services ? <ServicesList services={services} /> : <Loading />}
     </Layout>
   );
 };

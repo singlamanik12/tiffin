@@ -16,8 +16,13 @@ const MenuSelection = () => {
       setValues(data);
     } else {
       const { data } = await getMenuByCode(code);
-      navigate(`/menu/${data._id}`);
-      setValues(data);
+      if (data._id) {
+        navigate(`/menu/${data._id}`);
+
+        setValues(data);
+      } else {
+        window.location.href = "/";
+      }
     }
     setLoading(false);
   };
