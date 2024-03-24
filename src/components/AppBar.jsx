@@ -16,14 +16,18 @@ const EnableColorOnDarkAppBar = () => {
       <AppBar
         position="static"
         elevation={0}
-        style={{ backgroundColor: "white", color: "black" }}
+        style={{
+          backgroundColor: "white",
+          color: "black",
+          paddingTop: 15,
+          paddingInline: 10,
+        }}
       >
         <Toolbar style={{ padding: 0 }}>
           <SideBar />
           <Typography
             noWrap
             component="div"
-            sx={{ flexGrow: 1 }}
             style={{
               cursor: "pointer",
               fontSize: "20px",
@@ -32,7 +36,10 @@ const EnableColorOnDarkAppBar = () => {
             }}
           >
             <span onClick={() => navigate(`/`)}>
-              DT <span style={{ fontWeight: "bolder" }}>Meals</span>
+              <Typography fontSize={40} fontWeight="bold">
+                <span style={{ color: "#162328" }}>DT</span>{" "}
+                <span style={{ color: "#9f6ba0" }}>Meals</span>
+              </Typography>
             </span>
           </Typography>
           {/* <Button color="inherit" onClick={() => setOpen(true)}>

@@ -17,13 +17,13 @@ const App = () => {
   const [side, setSide] = React.useState({
     left: false,
   });
-  const [webConfig, setWebConfig] = useState();
-  const configWebsite = async () => {
-    const { data } = await getWebsiteConfig({
-      domainName: window.location.hostname,
-    });
-    setWebConfig(data);
-  };
+  // const [webConfig, setWebConfig] = useState();
+  // const configWebsite = async () => {
+  //   const { data } = await getWebsiteConfig({
+  //     domainName: window.location.hostname,
+  //   });
+  //   setWebConfig(data);
+  // };
   const theme = createTheme({
     typography: {
       fontFamily: "Merriweather, sans-serif",
@@ -47,7 +47,7 @@ const App = () => {
 
   useEffect(() => {
     const data = localStorage.getItem("user");
-    configWebsite();
+    // configWebsite();
     setUser(JSON.parse(data));
   }, []);
   return (
@@ -66,7 +66,7 @@ const App = () => {
       <AppBar />
       <LoginForm />
 
-      <Grid container style={{ minHeight: "80vh" }}>
+      <Grid container style={{ minHeight: "80vh", marginBottom: "100px" }}>
         <Loading />
         <ServiceRoutes />
       </Grid>

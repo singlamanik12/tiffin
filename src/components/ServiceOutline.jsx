@@ -51,8 +51,8 @@ const ServiceOutline = ({ service }) => {
       </Grid> */}
         <Grid item xs={12} style={{ color: "#808080", paddingInline: 10 }}>
           <Typography variant="caption">
-            {text.substring(0, 190)}
-            {text.length > 190 && "..."}
+            {text.substring(0, 320)}
+            {text.length > 320 && "..."}
           </Typography>
         </Grid>
 
